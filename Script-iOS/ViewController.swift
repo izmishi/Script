@@ -15,11 +15,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	@IBOutlet var textView: UITextView!
 	@IBOutlet var textField: UITextField!
 	@IBOutlet var bottomLayout: NSLayoutConstraint!
+	@IBOutlet var textViewTopLayout: NSLayoutConstraint!
 	@IBOutlet var topBar: UIView!
 	
 	var textVText: NSMutableAttributedString = NSMutableAttributedString(string: "")
 	let jsContext = JSContext()
 	var topInset: CGFloat = 0
+	let margin: CGFloat = 8
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -48,23 +50,34 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		textField.resignFirstResponder()
 	}
 	
+	func scrollToBottom() {
+		let end = NSMakeRange(textView.attributedText.length - 1, 1);
+		textView.scrollRangeToVisible(end)
+	}
+	
+	func animateTextField(duration: TimeInterval, curve: UInt, constant: CGFloat) {
+		UIView.animate(withDuration: duration, delay: 0, options: UIViewAnimationOptions(rawValue: curve), animations: {
+			self.bottomLayout.constant = constant
+			self.textViewTopLayout.constant = -20 - (constant - self.margin)
+			self.textView.contentInset.top = self.topInset + (constant - self.margin)
+			self.textView.scrollIndicatorInsets.top = self.topInset + (constant - self.margin)
+			self.view.layoutIfNeeded()
+			}, completion: nil)
+	}
+	
 	func keyboardWillShow(notification: NSNotification) {
 		let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
 		let curve = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as! UInt
 		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue() {
 			let dY = keyboardSize.height
-			UIView.animate(withDuration: duration, delay: 0, options: UIViewAnimationOptions(rawValue: curve), animations: {
-				self.bottomLayout.constant = dY + 8
-				}, completion: nil)
+			animateTextField(duration: duration, curve: curve, constant: dY + margin)
 		}
+		scrollToBottom()
 	}
 	func keyboardWillHide(notification: NSNotification) {
 		let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
 		let curve = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as! UInt
-		UIView.animate(withDuration: duration, delay: 0, options: UIViewAnimationOptions(rawValue: curve), animations: {
-			self.bottomLayout.constant = 8
-			}, completion: nil)
-		
+		animateTextField(duration: duration, curve: curve, constant: margin)
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -92,8 +105,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			textVText.append(AttributedString(string: "\n"))
 			textView.attributedText = textVText as AttributedString
 			
-			let end = NSMakeRange(textView.attributedText.length - 1, 1);
-			textView.scrollRangeToVisible(end)
+			scrollToBottom()
 			
 			textField.text = ""
 		}

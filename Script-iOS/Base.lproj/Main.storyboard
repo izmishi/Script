@@ -85,6 +85,7 @@
                         <outlet property="bottomLayout" destination="oie-BF-zSg" id="zX6-US-HkX"/>
                         <outlet property="textField" destination="ehU-WD-p6L" id="00M-Ws-dYB"/>
                         <outlet property="textView" destination="aeQ-c3-D9c" id="U2n-rq-6vv"/>
+                        <outlet property="textViewTopLayout" destination="P6d-5c-Rc8" id="271-9I-dwZ"/>
                         <outlet property="topBar" destination="xPP-q1-1mS" id="RMo-wI-hHq"/>
                     </connections>
                 </viewController>
