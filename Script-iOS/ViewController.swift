@@ -15,9 +15,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	@IBOutlet var textView: UITextView!
 	@IBOutlet var textField: UITextField!
 	@IBOutlet var bottomLayout: NSLayoutConstraint!
+	@IBOutlet var topBar: UIView!
 	
 	var textVText: NSMutableAttributedString = NSMutableAttributedString(string: "")
 	let jsContext = JSContext()
+	var topInset: CGFloat = 0
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -28,11 +30,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil);
 		view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
 		setNeedsStatusBarAppearanceUpdate()
+		textField.font = UIFont(name: "SFMono-Regular", size: fontSize)
+		textField.textColor = UIColor.white()
+//		textField.backgroundColor = UIColor.darkText()
 	}
 	
-	override func viewWillAppear(_ animated: Bool) {
-		self.textView.contentInset.top = 64
-		self.textView.scrollIndicatorInsets.top = 64
+	override func viewDidAppear(_ animated: Bool) {
+		topInset = topBar.frame.height
+		self.textView.contentInset.top = topInset
+		self.textView.scrollIndicatorInsets.top = topInset
 	}
 	
 	func dismissKeyboard() {
@@ -59,18 +65,35 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		let font = [NSFontAttributeName: UIFont(name: "SFMono-Medium", size: fontSize)!, NSForegroundColorAttributeName: UIColor.white()]
-		let text = AttributedString(string: textField.text!, attributes: font)
-		let msgFont = [NSFontAttributeName: UIFont(name: "SFMono-Regular", size: fontSize)!, NSForegroundColorAttributeName: UIColor.lightText()]
-		let msgText = AttributedString(string: jsEval(script: textField.text!, context: jsContext!).msg, attributes: msgFont)
-		
-		textVText.append(text)
-		textVText.append(AttributedString(string: "\n"))
-		textVText.append(msgText)
-		textVText.append(AttributedString(string: "\n"))
-		textView.attributedText = textVText as AttributedString
-		
-		textField.text = ""
+		if !(textField.text?.isEmpty)! {
+			var charArr: [Character] = []
+			for char in (textField.text?.characters)! {
+				charArr.append(char)
+			}
+			for i in 0..<charArr.count {
+				if charArr[i] != " " {
+					break
+				} else if i == charArr.count - 1 {
+					textField.text = ""
+					return true
+				}
+			}
+			let font = [NSFontAttributeName: UIFont(name: "SFMono-Medium", size: fontSize)!, NSForegroundColorAttributeName: UIColor.white()]
+			let text = AttributedString(string: textField.text!, attributes: font)
+			let msgFont = [NSFontAttributeName: UIFont(name: "SFMono-Regular", size: fontSize)!, NSForegroundColorAttributeName: UIColor.lightText()]
+			let msgText = AttributedString(string: jsEval(script: textField.text!, context: jsContext!).msg, attributes: msgFont)
+			
+			textVText.append(text)
+			textVText.append(AttributedString(string: "\n"))
+			textVText.append(msgText)
+			textVText.append(AttributedString(string: "\n"))
+			textView.attributedText = textVText as AttributedString
+			
+			let end = NSMakeRange(textView.attributedText.length - 1, 1);
+			textView.scrollRangeToVisible(end)
+			
+			textField.text = ""
+		}
 		return true
 	}
 	
