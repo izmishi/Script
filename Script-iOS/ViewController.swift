@@ -30,9 +30,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil);
 		view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
 		setNeedsStatusBarAppearanceUpdate()
-		textField.font = UIFont(name: "SFMono-Regular", size: fontSize)
+		textField.font = UIFont(name: "SFMono-Regular", size: fontSize + 2)
 		textField.textColor = UIColor.white()
-//		textField.backgroundColor = UIColor.darkText()
+		textField.backgroundColor = UIColor(white: 0.5, alpha: 0.25)
+		
+		let placeholder = AttributedString(string: ">", attributes: [NSFontAttributeName: UIFont(name: "SFMono-Medium", size: (textField.font?.pointSize)!)!,NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.3)  ])
+		textField.attributedPlaceholder = placeholder
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
