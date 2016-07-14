@@ -22,9 +22,9 @@ func getVariableName(script: String, context: JSContext) -> String? {
 		}
 		for i in 0..<charArr.count {
 			if charArr[i] == "=" {
-				str = str[str.startIndex..<str.index(str.startIndex, offsetBy: i - 1)]
+				str = str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)]
 				if context.evaluateScript(str) != JSValue.init(undefinedIn: context) {
-					return str
+					return str.replacingOccurrences(of: " ", with: "")
 				}
 			}
 		}
