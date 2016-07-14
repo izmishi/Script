@@ -10,7 +10,7 @@ import Foundation
 import JavaScriptCore
 
 func getVariableName(script: String, context: JSContext) -> String? {
-	if script.contains("=") {
+	if script.contains("=") && !script.hasPrefix("="){
 		var str = script
 		if script.hasPrefix("var ") {
 			let index = script.index(script.startIndex, offsetBy: 4)
