@@ -61,7 +61,7 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 			let end = script.index(script.startIndex, offsetBy: j < semicolonIndices.count ?  semicolonIndices[j] : script.characters.count)
 			var (e, m) = jsEval(script: script[start..<end].replacingOccurrences(of: ";", with: ""), context: context)
 			eval.append(e[0])
-			message += "\(m)" + (j < semicolonIndices.count ? "\n" : "")
+			message += "\(m)" + (j < semicolonIndices.count && m != "" ? "\n" : "")
 		}
 		return (eval, message)
 	}

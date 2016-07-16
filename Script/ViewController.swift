@@ -7,12 +7,16 @@
 //
 
 import Cocoa
+import AppKit
 
 class ViewController: NSViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+		self.view.window?.backgroundColor = NSColor.clear()
+		self.view.layer?.backgroundColor = NSColor.clear().cgColor
+		
+		
 		// Do any additional setup after loading the view.
 	}
 
