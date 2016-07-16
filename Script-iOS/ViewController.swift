@@ -38,6 +38,23 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		
 		let placeholder = AttributedString(string: ">", attributes: [NSFontAttributeName: UIFont(name: "SFMono-Medium", size: (textField.font?.pointSize)!)!,NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.3)  ])
 		textField.attributedPlaceholder = placeholder
+		
+		jsContext?.evaluateScript("function sin(deg) {return Math.sin(deg * Math.PI / 180)}")
+		jsContext?.evaluateScript("function cos(deg) {return Math.cos(deg * Math.PI / 180)}")
+		jsContext?.evaluateScript("function tan(deg) {return Math.tan(deg * Math.PI / 180)}")
+		jsContext?.evaluateScript("function asin(deg) {return Math.asin(deg * Math.PI / 180)}")
+		jsContext?.evaluateScript("function acos(deg) {return Math.acos(deg * Math.PI / 180)}")
+		jsContext?.evaluateScript("function atan(deg) {return Math.atan(deg * Math.PI / 180)}")
+		jsContext?.evaluateScript("function atan2(deg, deg2) {return Math.atan2(deg * Math.PI / 180, deg2 * Math.PI / 180)}")
+		jsContext?.evaluateScript("function sqrt(x) {return Math.sqrt(x)}")
+		jsContext?.evaluateScript("function ceil(x) {return Math.ceil(x)}")
+		jsContext?.evaluateScript("function floor(x) {return Math.floor(x)}")
+		jsContext?.evaluateScript("function round(x) {return Math.round(x)}")
+		jsContext?.evaluateScript("function pow(x, y) {return Math.pow(x, y)}")
+		jsContext?.evaluateScript("function random(x) {return Math.random(x)}")
+		jsContext?.evaluateScript("function exp(x) {return Math.exp(x)}")
+		jsContext?.evaluateScript("function log(x) {return Math.log(x)}")
+		jsContext?.evaluateScript("function abs(x) {return Math.abs(x)}")
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
