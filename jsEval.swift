@@ -15,6 +15,9 @@ func getVariableName(script: String, context: JSContext) -> String? {
 		if script.hasPrefix("var ") {
 			let index = script.index(script.startIndex, offsetBy: 4)
 			str = script[index..<script.endIndex]
+		} else if script.hasPrefix("const ") {
+			let index = script.index(script.startIndex, offsetBy: 6)
+			str = script[index..<script.endIndex]
 		}
 		var charArr: [Character] = []
 		for char in str.characters {

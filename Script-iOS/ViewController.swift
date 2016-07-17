@@ -56,6 +56,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		_ = jsContext?.evaluateScript("function exp(x) {return Math.exp(x)}")
 		_ = jsContext?.evaluateScript("function log(x) {return Math.log(x)}")
 		_ = jsContext?.evaluateScript("function abs(x) {return Math.abs(x)}")
+		_ = jsContext?.evaluateScript("const pi = Math.PI")
+		_ = jsContext?.evaluateScript("const e = Math.E")
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
