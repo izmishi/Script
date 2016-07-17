@@ -35,7 +35,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		textField.font = UIFont(name: "SFMono-Regular", size: fontSize + 2)
 		textField.textColor = UIColor.white()
 		textField.backgroundColor = UIColor(white: 0.5, alpha: 0.25)
-
 		
 		let placeholder = AttributedString(string: ">", attributes: [NSFontAttributeName: UIFont(name: "SFMono-Medium", size: (textField.font?.pointSize)!)!,NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.3)  ])
 		textField.attributedPlaceholder = placeholder
@@ -63,8 +62,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		topInset = topBar.frame.height
-		self.textView.contentInset.top = topInset
-		self.textView.scrollIndicatorInsets.top = topInset
+		textView.contentInset.top = topInset
+		textView.scrollIndicatorInsets.top = topInset
+		textView.isScrollEnabled = false
+		textView.isScrollEnabled = true
 	}
 	
 	func dismissKeyboard() {
