@@ -35,7 +35,6 @@ func getVariableName(script: String, context: JSContext) -> String? {
 	}
 	return nil
 }
-
 func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcName: String, parameterNames: String)? {
 	if script.contains("{") && script.hasPrefix("function"){
 		var str = script
@@ -56,7 +55,7 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 					funcName = funcName.replacingOccurrences(of: " ", with: "")
 				}
 			} else if charArr[i] == ")" {
-				parameterNames = str[str.index(str.startIndex, offsetBy: k + 1)...str.index(str.startIndex, offsetBy: i - 1)]
+				parameterNames = str[str.index(str.startIndex, offsetBy: k + 1)..<str.index(str.startIndex, offsetBy: i)]
 				if funcName != "" {
 					return (funcName, parameterNames)
 				}
@@ -66,7 +65,6 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 	}
 	return nil
 }
-
 func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String) {
 	var eval: [JSValue] = []
 	var message: String = "undefined"
@@ -74,8 +72,10 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 	if script == "" {
 		return ([JSValue.init(nullIn: context)], "")
 	}
+	
 	if let (funcName, paraNames) = getFunctionAndParameterNames(script: script, context: context) {
 		message = "\(funcName)(\(paraNames))"
+		//		return ([context.evaluateScript(script)], message)
 	} else if script.contains(";") && !script.hasPrefix(";") {
 		while script.hasSuffix(";") {
 			script = script[script.startIndex..<script.index(script.endIndex, offsetBy: -1)]
@@ -104,12 +104,15 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 	let evaluated = context.evaluateScript(script)
 	if let varName = getVariableName(script: script, context: context) {
 		message = "\(varName) = \(context.evaluateScript(varName)!)"
-	} else if evaluated == JSValue.init(undefinedIn: context) {
-		if context.evaluateScript("Math.\(script)") != JSValue.init(undefinedIn: context) {
-			return jsEval(script: "Math.\(script)", context: context)
-		}
-	} else {
+	} else if message == "undefined" {
 		message = "\(evaluated!)"
+	}
+	
+	if let num = Double(message) {
+		if message.contains(".") {
+			message = "\(num)"
+		}
 	}
 	return ([evaluated!], message)
 }
+
