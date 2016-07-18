@@ -39,6 +39,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		let placeholder = AttributedString(string: ">", attributes: [NSFontAttributeName: UIFont(name: "SFMono-Medium", size: (textField.font?.pointSize)!)!,NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.3)  ])
 		textField.attributedPlaceholder = placeholder
 		
+		
+		_ = jsContext?.evaluateScript("var console = { log: function(message) { _consoleLog(message) } }")
+		_ = jsContext?.evaluateScript("const print = function(message) { return console.log(message) }")
+		let consoleLog: @convention(block) (String) -> Void = { message in
+			self.printToScreen(message: message)
+		}
+		jsContext?.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "_consoleLog")
+		
 		_ = jsContext?.evaluateScript("const pi = Math.PI")
 		_ = jsContext?.evaluateScript("const e = Math.E")
 		_ = jsContext?.evaluateScript("const abs = function(x) {\n\treturn Math.abs(x)\n}")
@@ -118,11 +126,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			}
 			let font = [NSFontAttributeName: UIFont(name: "SFMono-Medium", size: fontSize)!, NSForegroundColorAttributeName: UIColor.white()]
 			let text = AttributedString(string: textField.text!, attributes: font)
+			textVText.append(text)
+			textVText.append(AttributedString(string: "\n"))
 			let msgFont = [NSFontAttributeName: UIFont(name: "SFMono-Regular", size: fontSize)!, NSForegroundColorAttributeName: UIColor.lightText()]
 			let msgText = AttributedString(string: jsEval(script: textField.text!, context: jsContext!).msg, attributes: msgFont)
 			
-			textVText.append(text)
-			textVText.append(AttributedString(string: "\n"))
 			textVText.append(msgText)
 			textVText.append(AttributedString(string: "\n"))
 			textView.attributedText = textVText as AttributedString
@@ -138,6 +146,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		let newCursorPosition = textField.position(from: (textField.selectedTextRange?.start)!, offset: offset)
 		let newSelectedRange = textField.textRange(from: newCursorPosition!, to:newCursorPosition!)
 		textField.selectedTextRange = newSelectedRange
+	}
+	
+	func printToScreen(message: String) {
+		let msgFont = [NSFontAttributeName: UIFont(name: "SFMono-Regular", size: fontSize)!, NSForegroundColorAttributeName: UIColor.lightText()]
+		let msgText = AttributedString(string: message, attributes: msgFont)
+		textVText.append(msgText)
+		textVText.append(AttributedString(string: "\n"))
+		textView.attributedText = textVText as AttributedString
 	}
 	
 	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

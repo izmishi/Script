@@ -75,8 +75,9 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 	
 	if let (funcName, paraNames) = getFunctionAndParameterNames(script: script, context: context) {
 		message = "\(funcName)(\(paraNames))"
+		return([context.evaluateScript(script)], message)
 		//		return ([context.evaluateScript(script)], message)
-	} else if script.contains(";") && !script.hasPrefix(";") {
+	} else if script.contains(";") && !script.hasPrefix(";") && !script.hasPrefix("for ") {
 		while script.hasSuffix(";") {
 			script = script[script.startIndex..<script.index(script.endIndex, offsetBy: -1)]
 		}
@@ -85,8 +86,22 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 		for char in script.characters {
 			charArr.append(char)
 		}
+		
+		var bracketLevel = 0
 		for i in 0..<charArr.count {
-			if charArr[i] == ";" {
+			switch charArr[i] {
+			case "(":
+				bracketLevel += 1
+			case "[":
+				bracketLevel += 1
+			case ")":
+				bracketLevel -= 1
+			case "]":
+				bracketLevel -= 1
+			default:
+				continue
+			}
+			if charArr[i] == ";" && bracketLevel == 0 {
 				semicolonIndices.append(i + 1)
 			}
 		}
@@ -105,7 +120,32 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 	if let varName = getVariableName(script: script, context: context) {
 		message = "\(varName) = \(context.evaluateScript(varName)!)"
 	} else if message == "undefined" {
-		message = "\(evaluated!)"
+		if evaluated == JSValue.init(undefinedIn: context) {
+			var ev = false
+			var charArr: [Character] = []
+			for char in script.characters {
+				charArr.append(char)
+			}
+			for i in 0..<charArr.count {
+				if charArr[i] == "(" {
+					let s = script[script.startIndex..<script.index(script.startIndex, offsetBy: i)]
+					if !String(context.evaluateScript(s)!).contains("return") && context.evaluateScript(s) != JSValue.init(undefinedIn: context){
+						message = ""
+						ev = true
+					}
+				}
+			}
+			if !ev {
+				let condensed = script.replacingOccurrences(of: " ", with: "")
+				if condensed.contains("){") {
+					if condensed.hasPrefix("while") || condensed.hasPrefix("for") {
+						message = ""
+					}
+				}
+			}
+		} else {
+			message = "\(evaluated!)"
+		}
 	}
 	
 	if let num = Double(message) {
@@ -115,4 +155,3 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 	}
 	return ([evaluated!], message)
 }
-
