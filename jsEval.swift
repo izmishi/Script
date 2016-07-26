@@ -39,7 +39,7 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 	if script.contains("{") && script.hasPrefix("function"){
 		var str = script
 		let index = script.index(script.startIndex, offsetBy: 8)
-		str = script[index..<script.endIndex].trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines())
+		str = script[index..<script.endIndex].trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 		var funcName = ""
 		var parameterNames = ""
 		var charArr: [Character] = []
@@ -68,7 +68,7 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String) {
 	var eval: [JSValue] = []
 	var message: String = "undefined"
-	var script = script.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines())
+	var script = script.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 	if script == "" {
 		return ([JSValue.init(nullIn: context)], "")
 	}
@@ -121,6 +121,9 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 		message = "\(varName) = \(context.evaluateScript(varName)!)"
 	} else if message == "undefined" {
 		if evaluated == JSValue.init(undefinedIn: context) {
+			if script.hasPrefix("print(") {
+				return ([evaluated!], "")
+			}
 			var ev = false
 			var charArr: [Character] = []
 			for char in script.characters {
@@ -154,4 +157,25 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 		}
 	}
 	return ([evaluated!], message)
+}
+func addMaths(jsContext: JSContext) {
+	_ = jsContext.evaluateScript("const pi = Math.PI")
+	_ = jsContext.evaluateScript("const e = Math.E")
+	_ = jsContext.evaluateScript("const abs = function(x) {\n\treturn Math.abs(x)\n}")
+	_ = jsContext.evaluateScript("const ceil = function(x) {\n\treturn Math.ceil(x)\n}")
+	_ = jsContext.evaluateScript("const exp = function(x) {\n\treturn Math.exp(x)\n}")
+	_ = jsContext.evaluateScript("const floor = function(x) {\n\treturn Math.floor(x)\n}")
+	_ = jsContext.evaluateScript("const log = function(x) {\n\treturn Math.log(x)\n}")
+	_ = jsContext.evaluateScript("const pow = function(x, y) {\n\treturn Math.pow(x, y)\n}")
+	_ = jsContext.evaluateScript("const random = function(x) {\n\treturn Math.random(x)\n}")
+	_ = jsContext.evaluateScript("const round = function(x) {\n\treturn Math.round(x)\n}")
+	_ = jsContext.evaluateScript("const sqrt = function(x) {\nr\teturn Math.sqrt(x)\n}")
+	
+	_ = jsContext.evaluateScript("const sin = function(deg) {\n\treturn Math.sin(deg * pi / 180)\n}")
+	_ = jsContext.evaluateScript("const cos = function(deg) {\n\treturn Math.cos(deg * pi / 180)\n}")
+	_ = jsContext.evaluateScript("const tan = function(deg) {\n\treturn Math.tan(deg * pi/ 180)\n}")
+	_ = jsContext.evaluateScript("const asin = functionx) {\n\treturn Math.asin(x) * 180 / pi\n}")
+	_ = jsContext.evaluateScript("const acos = function(x) {\n\treturn Math.acos(x) * 180 / pi\n}")
+	_ = jsContext.evaluateScript("const atan = function(x) {\n\treturn Math.atan(x) * 180 / pi\n}")
+	_ = jsContext.evaluateScript("const atan2 = function(x, y) {\n\treturn Math.atan2(x,y) * 180 / pi\n}")
 }

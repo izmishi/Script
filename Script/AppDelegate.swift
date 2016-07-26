@@ -25,20 +25,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	lazy var applicationDocumentsDirectory: Foundation.URL = {
 	    // The directory the application uses to store the Core Data store file. This code uses a directory named "com.apple.toolsQA.CocoaApp_CD" in the user's Application Support directory.
-	    let urls = FileManager.default().urlsForDirectory(.applicationSupportDirectory, inDomains: .userDomainMask)
+	    let urls = FileManager.default.urlsForDirectory(.applicationSupportDirectory, inDomains: .userDomainMask)
 	    let appSupportURL = urls[urls.count - 1]
 	    return try! appSupportURL.appendingPathComponent("com.apple.toolsQA.CocoaApp_CD")
 	}()
 
 	lazy var managedObjectModel: NSManagedObjectModel = {
 	    // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-	    let modelURL = Bundle.main().urlForResource("Script", withExtension: "momd")!
+	    let modelURL = Bundle.main.urlForResource("Script", withExtension: "momd")!
 	    return NSManagedObjectModel(contentsOf: modelURL)!
 	}()
 
 	lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
 	    // The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it. (The directory for the store is created, if necessary.) This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
-	    let fileManager = FileManager.default()
+	    let fileManager = FileManager.default
 	    var failError: NSError? = nil
 	    var shouldFail = false
 	    var failureReason = "There was an error creating or loading the application's saved data."

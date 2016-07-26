@@ -46,7 +46,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			self.printToScreen(message: message)
 		}
 		jsContext?.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "_consoleLog")
-		
+		addMaths(jsContext: jsContext)
+		/*
 		_ = jsContext?.evaluateScript("const pi = Math.PI")
 		_ = jsContext?.evaluateScript("const e = Math.E")
 		_ = jsContext?.evaluateScript("const abs = function(x) {\n\treturn Math.abs(x)\n}")
@@ -65,7 +66,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		_ = jsContext?.evaluateScript("const asin = functionx) {\n\treturn Math.asin(x) * 180 / pi\n}")
 		_ = jsContext?.evaluateScript("const acos = function(x) {\n\treturn Math.acos(x) * 180 / pi\n}")
 		_ = jsContext?.evaluateScript("const atan = function(x) {\n\treturn Math.atan(x) * 180 / pi\n}")
-		_ = jsContext?.evaluateScript("const atan2 = function(x, y) {\n\treturn Math.atan2(x,y) * 180 / pi\n}")
+		_ = jsContext?.evaluateScript("const atan2 = function(x, y) {\n\treturn Math.atan2(x,y) * 180 / pi\n}")*/
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -132,7 +133,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			let msgText = AttributedString(string: jsEval(script: textField.text!, context: jsContext!).msg, attributes: msgFont)
 			
 			textVText.append(msgText)
-			textVText.append(AttributedString(string: "\n"))
+			textVText.append(AttributedString(string: msgText == AttributedString("") ? "" : "\n"))
 			textView.attributedText = textVText as AttributedString
 			
 			scrollToBottom()
@@ -166,6 +167,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			moveCursor(offset: -1)
 		case "[":
 			textField.insertText("]")
+			moveCursor(offset: -1)
+		case "\"":
+			textField.insertText("\"")
 			moveCursor(offset: -1)
 		default:
 			break
