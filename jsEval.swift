@@ -6,10 +6,18 @@
 //  Copyright © 2016 Izumu Mishima. All rights reserved.
 //
 
+//import AppKit
 import Foundation
 import JavaScriptCore
 
+
+var textVText: NSMutableAttributedString = NSMutableAttributedString(string: "")
+let fontSize: CGFloat = 14
+
 func getVariableName(script: String, context: JSContext) -> String? {
+	if script.contains("+=") || script.contains("-=") || script.contains("*=") || script.contains("/=") || script.contains("==") {
+		return nil
+	}
 	if script.contains("=") && !script.hasPrefix("="){
 		var str = script
 		if script.hasPrefix("var ") {
@@ -25,8 +33,9 @@ func getVariableName(script: String, context: JSContext) -> String? {
 		}
 		for i in 0..<charArr.count {
 			if charArr[i] == "=" {
-				str = str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)]
-				if context.evaluateScript(str) != JSValue.init(undefinedIn: context) {
+				if i > 0 {
+					str = str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)]
+					//				if context.evaluateScript(str) != JSValue.init(undefinedIn: context) {
 					return str.replacingOccurrences(of: " ", with: "")
 				}
 				break
@@ -50,8 +59,8 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 		for i in 0..<charArr.count {
 			if charArr[i] == "(" {
 				k = i
-				funcName = str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)]
-				if context.evaluateScript(funcName) != JSValue.init(undefinedIn: context) {
+				if i > 0 {
+					funcName = str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)]
 					funcName = funcName.replacingOccurrences(of: " ", with: "")
 				}
 			} else if charArr[i] == ")" {
@@ -65,10 +74,16 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 	}
 	return nil
 }
-func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String) {
+
+func evaluateJS(script: String, context: JSContext) -> (eval: [JSValue], msg: String) {
 	var eval: [JSValue] = []
 	var message: String = "undefined"
 	var script = script.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+	
+	defer {
+		appendMessage(message: message)
+	}
+	
 	if script == "" {
 		return ([JSValue.init(nullIn: context)], "")
 	}
@@ -77,52 +92,17 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 		message = "\(funcName)(\(paraNames))"
 		return([context.evaluateScript(script)], message)
 		//		return ([context.evaluateScript(script)], message)
-	} else if script.contains(";") && !script.hasPrefix(";") && !script.hasPrefix("for ") {
-		while script.hasSuffix(";") {
-			script = script[script.startIndex..<script.index(script.endIndex, offsetBy: -1)]
-		}
-		var semicolonIndices: [Int] = []
-		var charArr: [Character] = []
-		for char in script.characters {
-			charArr.append(char)
-		}
-		
-		var bracketLevel = 0
-		for i in 0..<charArr.count {
-			switch charArr[i] {
-			case "(":
-				bracketLevel += 1
-			case "[":
-				bracketLevel += 1
-			case ")":
-				bracketLevel -= 1
-			case "]":
-				bracketLevel -= 1
-			default:
-				continue
-			}
-			if charArr[i] == ";" && bracketLevel == 0 {
-				semicolonIndices.append(i + 1)
-			}
-		}
-		message = ""
-		
-		for j in 0...semicolonIndices.count {
-			let start = script.index(script.startIndex, offsetBy: j == 0 ? 0 : semicolonIndices[j - 1])
-			let end = script.index(script.startIndex, offsetBy: j < semicolonIndices.count ?  semicolonIndices[j] : script.characters.count)
-			var (e, m) = jsEval(script: script[start..<end].replacingOccurrences(of: ";", with: ""), context: context)
-			eval.append(e[0])
-			message += "\(m)" + (j < semicolonIndices.count && m != "" ? "\n" : "")
-		}
-		return (eval, message)
 	}
 	let evaluated = context.evaluateScript(script)
-	if let varName = getVariableName(script: script, context: context) {
+	if script.hasPrefix("for ") {
+		message = ""
+	} else if let varName = getVariableName(script: script, context: context) {
 		message = "\(varName) = \(context.evaluateScript(varName)!)"
 	} else if message == "undefined" {
 		if evaluated == JSValue.init(undefinedIn: context) {
 			if script.hasPrefix("print(") {
-				return ([evaluated!], "")
+				message = ""
+				return ([evaluated!], message)
 			}
 			var ev = false
 			var charArr: [Character] = []
@@ -141,7 +121,7 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 			if !ev {
 				let condensed = script.replacingOccurrences(of: " ", with: "")
 				if condensed.contains("){") {
-					if condensed.hasPrefix("while") || condensed.hasPrefix("for") {
+					if condensed.hasPrefix("while") || condensed.hasPrefix("for") || condensed.hasPrefix("if") {
 						message = ""
 					}
 				}
@@ -158,7 +138,72 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 	}
 	return ([evaluated!], message)
 }
+
+func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String) {
+	var eval: [JSValue] = []
+	var message: String = "undefined"
+	var script = script.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+	
+	if script == "" {
+		return ([JSValue.init(nullIn: context)], "")
+	}
+	
+	if ((script.contains(";") && !script.hasPrefix(";")) || (script.contains("\n"))) && !(script.hasPrefix("for ") && !(script.contains("}\n") || script.contains("};"))) {
+		while script.hasSuffix(";") || script.hasSuffix("\n") {
+			script = script[script.startIndex..<script.index(script.endIndex, offsetBy: -1)]
+		}
+		var semicolonIndices: [Int] = []
+		var charArr: [Character] = []
+		for char in script.characters {
+			charArr.append(char)
+		}
+		var bracketLevel = 0
+		for i in 0..<charArr.count {
+			switch charArr[i] {
+			case "(":
+				bracketLevel += 1
+			case "[":
+				bracketLevel += 1
+			case "{":
+				bracketLevel += 1
+			case ")":
+				bracketLevel -= 1
+			case "]":
+				bracketLevel -= 1
+			case "}":
+				bracketLevel -= 1
+			default:
+				break
+			}
+			if (charArr[i] == ";" || charArr[i] == "\n") && bracketLevel == 0 {
+				semicolonIndices.append(i + 1)
+			}
+		}
+		message = ""
+		
+		for j in 0...semicolonIndices.count {
+			let start = script.index(script.startIndex, offsetBy: j == 0 ? 0 : semicolonIndices[j - 1])
+			let end = script.index(script.startIndex, offsetBy: j < semicolonIndices.count ?  semicolonIndices[j] : script.characters.count)
+			var (e, m) = evaluateJS(script: script[start..<end], context: context)
+			eval.append(e[0])
+			message += "\(m)" //+ (j < semicolonIndices.count && m != "" ? "\n" : "")
+		}
+		return (eval, message)
+	}
+	return evaluateJS(script: script, context: context)
+}
+
+func printToScreen(message: String) {
+	appendMessage(message: message)
+}
 func addMaths(jsContext: JSContext) {
+	_ = jsContext.evaluateScript("var console = { log: function(message) { _consoleLog(message) } }")
+	_ = jsContext.evaluateScript("const print = function(message) { return console.log(message) }")
+	let consoleLog: @convention(block) (String) -> Void = { message in
+		printToScreen(message: message)
+	}
+	jsContext.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "_consoleLog")
+	
 	_ = jsContext.evaluateScript("const pi = Math.PI")
 	_ = jsContext.evaluateScript("const e = Math.E")
 	_ = jsContext.evaluateScript("const abs = function(x) {\n\treturn Math.abs(x)\n}")

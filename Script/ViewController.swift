@@ -10,50 +10,58 @@ import Cocoa
 import AppKit
 import JavaScriptCore
 
-class ViewController: NSViewController, NSTextFieldDelegate, NSTextViewDelegate {
+func appendMessage(message: String) {
+	if message != "" {
+		let msgFont = [NSFontAttributeName: NSFont(name: "SFMono-Regular", size: fontSize)!, NSForegroundColorAttributeName: NSColor.white()]
+		let msgText = AttributedString(string: message, attributes: msgFont)
+		textVText.append(msgText)
+		textVText.append(AttributedString(string: "\n"))
+	}
+}
+
+class ViewController: NSViewController, NSTextViewDelegate {
 	
 	@IBOutlet var textView: NSTextView!
 	@IBOutlet var textField: NSTextField!
+	@IBOutlet var inputTextView: NSTextView!
 	
-	var textVText: NSMutableAttributedString = NSMutableAttributedString(string: "")
+	var braceLevel: Int = 0
+	
+	//	var textVText: NSMutableAttributedString = NSMutableAttributedString(string: "")
 	let jsContext = JSContext()
-	let fontSize: CGFloat = 14
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.view.window?.backgroundColor = NSColor.clear()
 		self.view.layer?.backgroundColor = NSColor.clear().cgColor
-		textField.delegate = self
+		
+		NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (aEvent) -> NSEvent? in
+			self.keyDown(aEvent)
+			return aEvent
+		}
+		
+		NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { (theEvent) -> NSEvent? in
+			self.flagsChanged(theEvent)
+			return theEvent
+		}
+		
+		inputTextView.delegate = self
+		inputTextView.frame = NSRect(x: inputTextView.frame.minX, y: inputTextView.frame.minY, width: inputTextView.frame.width, height: 22)
 		
 		textView.textStorage?.setAttributedString(AttributedString(string: ""))
-		textField.font = NSFont(name: "SFMono-Regular", size: fontSize + 2)
-		textField.textColor = NSColor.white()
-		textField.backgroundColor = NSColor(white: 0.5, alpha: 0.25)
 		
-		let placeholder = AttributedString(string: ">", attributes: [NSFontAttributeName: NSFont(name: "SFMono-Medium", size: (textField.font?.pointSize)!)!,NSForegroundColorAttributeName: NSColor(white: 1, alpha: 0.3)  ])
-		textField.placeholderAttributedString = placeholder
+		inputTextView.font = NSFont(name: "SFMono-Regular", size: fontSize + 2)
+		inputTextView.textColor = NSColor.white()
+		inputTextView.backgroundColor = NSColor(white: 0, alpha: 0.25)
+		inputTextView.isAutomaticQuoteSubstitutionEnabled = false
+		braceLevel = 0
 		
-		
-		_ = jsContext?.evaluateScript("var console = { log: function(message) { _consoleLog(message) } }")
-		_ = jsContext?.evaluateScript("const print = function(message) { return console.log(message) }")
-		let consoleLog: @convention(block) (String) -> Void = { message in
-			self.printToScreen(message: message)
-		}
-		jsContext?.setObject(unsafeBitCast(consoleLog, to: AnyObject.self), forKeyedSubscript: "_consoleLog")
 		addMaths(jsContext: jsContext!)
-	}
-
-	func printToScreen(message: String) {
-		let msgFont = [NSFontAttributeName: NSFont(name: "SFMono-Regular", size: fontSize)!, NSForegroundColorAttributeName: NSColor.white()]
-		let msgText = AttributedString(string: message, attributes: msgFont)
-		textVText.append(msgText)
-		textVText.append(AttributedString(string: "\n"))
-		textView.textStorage?.setAttributedString(textVText as AttributedString)
 	}
 	
 	override var representedObject: AnyObject? {
 		didSet {
-		// Update the view, if already loaded.
+			// Update the view, if already loaded.
 		}
 	}
 	
@@ -61,39 +69,120 @@ class ViewController: NSViewController, NSTextFieldDelegate, NSTextViewDelegate 
 		let end = NSMakeRange((textView.textStorage?.string.characters.count)! - 1 , 1);
 		textView.scrollRangeToVisible(end)
 	}
-
-	func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
-		if !textField.stringValue.isEmpty {
+	
+	override func keyDown(_ theEvent:NSEvent) {
+		if theEvent.keyCode == 36 && theEvent.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command {
+			_ = jsEntered()
+		} else if theEvent.keyCode == 76 && theEvent.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command {
+			_ = jsEntered()
+		}
+	}
+	
+	func textShouldEndEditing(_ textObject: NSText) -> Bool {
+		return jsEntered()
+	}
+	
+	func moveCursor(offset: Int) {
+		let newCursorPosition = inputTextView.selectedRanges[0].rangeValue
+		inputTextView.setSelectedRange(NSMakeRange(newCursorPosition.location + offset, 0))
+	}
+	
+	func textView(_ textView: NSTextView, shouldChangeTextIn affectedCharRange: NSRange, replacementString: String?) -> Bool {
+		switch replacementString! {
+		case "{":
+			inputTextView.replaceCharacters(in: inputTextView.selectedRanges[0].rangeValue, with: "{}")
+			moveCursor(offset: -1)
+			return false
+		case "(":
+			inputTextView.replaceCharacters(in: inputTextView.selectedRanges[0].rangeValue, with: "()")
+			moveCursor(offset: -1)
+			return false
+		case "[":
+			inputTextView.replaceCharacters(in: inputTextView.selectedRanges[0].rangeValue, with: "[]")
+			moveCursor(offset: -1)
+			return false
+		case "\"":
+			inputTextView.replaceCharacters(in: inputTextView.selectedRanges[0].rangeValue, with: "\"\"")
+			moveCursor(offset: -1)
+			return false
+		case "\n":
+			braceLevel = 0
+			for i in 0..<inputTextView.selectedRanges[0].rangeValue.location {
+				let index = inputTextView.string!.index((inputTextView.string!.startIndex), offsetBy: i)
+				let c = String(inputTextView.string!.characters[index...index])
+				if c == "{" {
+					braceLevel += 1
+				} else if c == "}" {
+					braceLevel -= 1
+				}
+			}
+			var indents = ""
+			if braceLevel > 0 {
+				for _ in 0..<braceLevel {
+					indents += "\t"
+				}
+			}
+			
+			defer {
+				inputTextView.replaceCharacters(in: inputTextView.selectedRanges[0].rangeValue, with: "\n" + indents)
+			}
+			let indx = inputTextView.string!.index(inputTextView.string!.startIndex, offsetBy: inputTextView.selectedRanges[0].rangeValue.location)
+			if inputTextView.string!.endIndex != indx && indx != inputTextView.string!.startIndex {
+				let a = inputTextView.string!.index(inputTextView.string!.startIndex, offsetBy: inputTextView.selectedRanges[0].rangeValue.location)
+				let b = inputTextView.string!.index(inputTextView.string!.startIndex, offsetBy: inputTextView.selectedRanges[0].rangeValue.location - 1)
+				let before = String(inputTextView.string!.characters[b...b])
+				let after = String(inputTextView.string!.characters[a...a])
+				if before == "{" && after == "}" {
+					var indents2 = ""
+					if braceLevel > 1 {
+						for _ in 1..<braceLevel {
+							indents2 += "\t"
+						}
+					}
+					defer {
+						inputTextView.replaceCharacters(in: inputTextView.selectedRanges[0].rangeValue, with: "\n" + indents2)
+						for _ in 0..<braceLevel {
+							moveCursor(offset: -1)
+						}
+					}
+				}
+			}
+			return false
+		default:
+			break
+		}
+		
+		
+		return true
+	}
+	
+	func jsEntered() -> Bool {
+		if !(inputTextView.string?.isEmpty)! {
 			var charArr: [Character] = []
-			for char in textField.stringValue.characters {
+			for char in (inputTextView.string?.characters)! {
 				charArr.append(char)
 			}
 			for i in 0..<charArr.count {
 				if charArr[i] != " " {
 					break
 				} else if i == charArr.count - 1 {
-					textField.stringValue = ""
+					inputTextView.string = ""
 					return true
 				}
 			}
 			let font = [NSFontAttributeName: NSFont(name: "SFMono-Bold", size: fontSize + 2)!, NSForegroundColorAttributeName: NSColor.white()]
-			let text = AttributedString(string: textField.stringValue, attributes: font)
+			let text = AttributedString(string: inputTextView.string!, attributes: font)
 			textVText.append(text)
 			textVText.append(AttributedString(string: "\n"))
-			let msgFont = [NSFontAttributeName: NSFont(name: "SFMono-Regular", size: fontSize)!, NSForegroundColorAttributeName: NSColor.white()]
-			let msgText = AttributedString(string: jsEval(script: textField.stringValue, context: jsContext!).msg, attributes: msgFont)
+			_ = jsEval(script: inputTextView.string!, context: jsContext!)
 			
-			textVText.append(msgText)
-			textVText.append(AttributedString(string: msgText == AttributedString(string: "") ? "" : "\n"))
 			textView.textStorage?.setAttributedString(textVText as AttributedString)
 			
 			scrollToBottom()
 			
-			textField.stringValue = ""
+			inputTextView.string = ""
 		}
 		return true
 	}
-
-	
 }
 
