@@ -200,7 +200,7 @@ class ViewController: UIViewController, UITextViewDelegate {
 				}
 				moveCursor(offset: -1 - (4 * (indentationLevel - 1)))
 				return false
-			} else if characterBefore != ";" {
+			} else if ![";", "}", "\n"].contains(characterBefore){
 				textView.insertText(";")
 			}
 			textView.insertText("\n")
