@@ -22,7 +22,7 @@ func appendMessage(message: String) {
 class ViewController: NSViewController, NSTextViewDelegate {
 	
 	@IBOutlet var textView: NSTextView!
-	@IBOutlet var textField: NSTextField!
+	@IBOutlet var inputTextView: NSTextField!
 	@IBOutlet var inputTextView: NSTextView!
 	
 	var braceLevel: Int = 0

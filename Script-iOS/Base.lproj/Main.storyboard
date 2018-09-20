@@ -9,8 +9,8 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SFMono-Regular.otf">
-            <string>SFMono-Regular</string>
+        <array key="SFMono-Medium.otf">
+            <string>SFMono-Medium</string>
         </array>
     </customFonts>
     <scenes>
@@ -26,15 +26,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="&gt;" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="ehU-WD-p6L">
-                                <rect key="frame" x="8" y="530" width="304" height="30"/>
-                                <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" name="SFMono-Regular" family="SF Mono" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="alert"/>
-                            </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aeQ-c3-D9c">
-                                <rect key="frame" x="8" y="50" width="304" height="472"/>
+                                <rect key="frame" x="8" y="50" width="304" height="466"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <attributedString key="attributedText">
                                     <fragment>
@@ -71,27 +64,54 @@
                                 </constraints>
                                 <blurEffect style="dark"/>
                             </visualEffectView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" text="&gt;" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="chG-Ge-gy2">
+                                <rect key="frame" x="8" y="524" width="274" height="36"/>
+                                <color key="backgroundColor" white="0.20021634615384615" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="o8V-BM-YeF"/>
+                                </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="SFMono-Medium" family="SF Mono" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zuy-wd-45q">
+                                <rect key="frame" x="282" y="524" width="30" height="36"/>
+                                <color key="backgroundColor" white="0.20021634620000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="nsJ-E0-rXd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="⬆︎"/>
+                                <connections>
+                                    <action selector="enterButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ws1-9s-Y83"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.019607843137254902" green="0.019607843137254902" blue="0.039215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="1" green="0.31372549020000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="MAV-vV-35E" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="0AB-qd-MBS"/>
+                            <constraint firstItem="Zuy-wd-45q" firstAttribute="top" secondItem="chG-Ge-gy2" secondAttribute="top" id="2Rd-Ot-oez"/>
                             <constraint firstItem="MAV-vV-35E" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="54Y-1s-drw"/>
                             <constraint firstItem="aeQ-c3-D9c" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-8" id="FKR-pa-atF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aeQ-c3-D9c" secondAttribute="trailing" constant="-8" id="J1c-MB-r1t"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ehU-WD-p6L" secondAttribute="trailing" constant="-8" id="Vrm-ZK-cb8"/>
-                            <constraint firstItem="ehU-WD-p6L" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-8" id="bpP-kw-9bT"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="chG-Ge-gy2" secondAttribute="bottom" constant="8" id="WOl-am-yux"/>
+                            <constraint firstAttribute="trailing" secondItem="Zuy-wd-45q" secondAttribute="trailing" constant="8" id="WOy-Mz-J5j"/>
+                            <constraint firstItem="chG-Ge-gy2" firstAttribute="top" secondItem="aeQ-c3-D9c" secondAttribute="bottom" constant="8" id="ZGv-vm-Dah"/>
+                            <constraint firstItem="Zuy-wd-45q" firstAttribute="bottom" secondItem="chG-Ge-gy2" secondAttribute="bottom" id="avW-5i-eNv"/>
+                            <constraint firstItem="chG-Ge-gy2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="ebe-kb-VVF"/>
                             <constraint firstItem="aeQ-c3-D9c" firstAttribute="top" secondItem="MAV-vV-35E" secondAttribute="bottom" id="esC-Cd-vIf"/>
                             <constraint firstAttribute="trailing" secondItem="MAV-vV-35E" secondAttribute="trailing" id="muM-rY-XaH"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ehU-WD-p6L" secondAttribute="bottom" constant="8" id="oie-BF-zSg"/>
-                            <constraint firstItem="ehU-WD-p6L" firstAttribute="top" secondItem="aeQ-c3-D9c" secondAttribute="bottom" constant="8" id="yVN-IR-64H"/>
+                            <constraint firstItem="Zuy-wd-45q" firstAttribute="leading" secondItem="chG-Ge-gy2" secondAttribute="trailing" id="qgM-ky-5kR"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <outlet property="bottomLayout" destination="oie-BF-zSg" id="zX6-US-HkX"/>
-                        <outlet property="textField" destination="ehU-WD-p6L" id="00M-Ws-dYB"/>
-                        <outlet property="textView" destination="aeQ-c3-D9c" id="U2n-rq-6vv"/>
+                        <outlet property="bottomLayoutConstraint" destination="WOl-am-yux" id="DgA-4P-apu"/>
+                        <outlet property="enterButton" destination="Zuy-wd-45q" id="oMk-6Q-gtE"/>
+                        <outlet property="inputTextView" destination="chG-Ge-gy2" id="W4N-wl-gQB"/>
+                        <outlet property="inputTextViewHeight" destination="o8V-BM-YeF" id="0qf-51-BFa"/>
+                        <outlet property="outputTextView" destination="aeQ-c3-D9c" id="U2n-rq-6vv"/>
                         <outlet property="topBar" destination="xPP-q1-1mS" id="RMo-wI-hHq"/>
                     </connections>
                 </viewController>

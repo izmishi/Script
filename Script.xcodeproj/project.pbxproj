@@ -7,52 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		80796D031D35C01A00A728B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80796D021D35C01A00A728B3 /* AppDelegate.swift */; };
-		80796D051D35C01A00A728B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80796D041D35C01A00A728B3 /* ViewController.swift */; };
-		80796D081D35C01A00A728B3 /* Script.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 80796D061D35C01A00A728B3 /* Script.xcdatamodeld */; };
-		80796D0A1D35C01A00A728B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80796D091D35C01A00A728B3 /* Assets.xcassets */; };
-		80796D0D1D35C01A00A728B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80796D0B1D35C01A00A728B3 /* Main.storyboard */; };
 		80796D371D35C0FA00A728B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80796D361D35C0FA00A728B3 /* AppDelegate.swift */; };
 		80796D391D35C0FA00A728B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80796D381D35C0FA00A728B3 /* ViewController.swift */; };
 		80796D3C1D35C0FA00A728B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80796D3A1D35C0FA00A728B3 /* Main.storyboard */; };
 		80796D3E1D35C0FA00A728B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80796D3D1D35C0FA00A728B3 /* Assets.xcassets */; };
 		80796D411D35C0FA00A728B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80796D3F1D35C0FA00A728B3 /* LaunchScreen.storyboard */; };
-		80796D631D35C17A00A728B3 /* jsEval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80796D621D35C17A00A728B3 /* jsEval.swift */; };
 		80796D641D35C17A00A728B3 /* jsEval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80796D621D35C17A00A728B3 /* jsEval.swift */; };
-		80F86CAE1D368E2E0094D4B3 /* SFMono-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA21D368E2E0094D4B3 /* SFMono-Bold.otf */; };
 		80F86CAF1D368E2E0094D4B3 /* SFMono-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA21D368E2E0094D4B3 /* SFMono-Bold.otf */; };
-		80F86CB01D368E2E0094D4B3 /* SFMono-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA31D368E2E0094D4B3 /* SFMono-BoldItalic.otf */; };
 		80F86CB11D368E2E0094D4B3 /* SFMono-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA31D368E2E0094D4B3 /* SFMono-BoldItalic.otf */; };
-		80F86CB21D368E2E0094D4B3 /* SFMono-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA41D368E2E0094D4B3 /* SFMono-Heavy.otf */; };
 		80F86CB31D368E2E0094D4B3 /* SFMono-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA41D368E2E0094D4B3 /* SFMono-Heavy.otf */; };
-		80F86CB41D368E2E0094D4B3 /* SFMono-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA51D368E2E0094D4B3 /* SFMono-HeavyItalic.otf */; };
 		80F86CB51D368E2E0094D4B3 /* SFMono-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA51D368E2E0094D4B3 /* SFMono-HeavyItalic.otf */; };
-		80F86CB61D368E2E0094D4B3 /* SFMono-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA61D368E2E0094D4B3 /* SFMono-Light.otf */; };
 		80F86CB71D368E2E0094D4B3 /* SFMono-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA61D368E2E0094D4B3 /* SFMono-Light.otf */; };
-		80F86CB81D368E2E0094D4B3 /* SFMono-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA71D368E2E0094D4B3 /* SFMono-LightItalic.otf */; };
 		80F86CB91D368E2E0094D4B3 /* SFMono-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA71D368E2E0094D4B3 /* SFMono-LightItalic.otf */; };
-		80F86CBA1D368E2E0094D4B3 /* SFMono-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA81D368E2E0094D4B3 /* SFMono-Medium.otf */; };
 		80F86CBB1D368E2E0094D4B3 /* SFMono-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA81D368E2E0094D4B3 /* SFMono-Medium.otf */; };
-		80F86CBC1D368E2E0094D4B3 /* SFMono-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA91D368E2E0094D4B3 /* SFMono-MediumItalic.otf */; };
 		80F86CBD1D368E2E0094D4B3 /* SFMono-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA91D368E2E0094D4B3 /* SFMono-MediumItalic.otf */; };
-		80F86CBE1D368E2E0094D4B3 /* SFMono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAA1D368E2E0094D4B3 /* SFMono-Regular.otf */; };
 		80F86CBF1D368E2E0094D4B3 /* SFMono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAA1D368E2E0094D4B3 /* SFMono-Regular.otf */; };
-		80F86CC01D368E2E0094D4B3 /* SFMono-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAB1D368E2E0094D4B3 /* SFMono-RegularItalic.otf */; };
 		80F86CC11D368E2E0094D4B3 /* SFMono-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAB1D368E2E0094D4B3 /* SFMono-RegularItalic.otf */; };
-		80F86CC21D368E2E0094D4B3 /* SFMono-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAC1D368E2E0094D4B3 /* SFMono-Semibold.otf */; };
 		80F86CC31D368E2E0094D4B3 /* SFMono-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAC1D368E2E0094D4B3 /* SFMono-Semibold.otf */; };
-		80F86CC41D368E2E0094D4B3 /* SFMono-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAD1D368E2E0094D4B3 /* SFMono-SemiboldItalic.otf */; };
 		80F86CC51D368E2E0094D4B3 /* SFMono-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CAD1D368E2E0094D4B3 /* SFMono-SemiboldItalic.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		80796CFF1D35C01A00A728B3 /* Script.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Script.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		80796D021D35C01A00A728B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		80796D041D35C01A00A728B3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		80796D071D35C01A00A728B3 /* Script.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Script.xcdatamodel; sourceTree = "<group>"; };
-		80796D091D35C01A00A728B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		80796D0C1D35C01A00A728B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		80796D0E1D35C01A00A728B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		80796D341D35C0FA00A728B3 /* Script.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Script.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80796D361D35C0FA00A728B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		80796D381D35C0FA00A728B3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -76,13 +51,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		80796CFC1D35C01900A728B3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		80796D311D35C0FA00A728B3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -97,7 +65,6 @@
 			isa = PBXGroup;
 			children = (
 				80796D651D35C18000A728B3 /* Common */,
-				80796D011D35C01A00A728B3 /* Script */,
 				80796D351D35C0FA00A728B3 /* Script-iOS */,
 				80796D001D35C01A00A728B3 /* Products */,
 			);
@@ -106,23 +73,9 @@
 		80796D001D35C01A00A728B3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				80796CFF1D35C01A00A728B3 /* Script.app */,
 				80796D341D35C0FA00A728B3 /* Script.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		80796D011D35C01A00A728B3 /* Script */ = {
-			isa = PBXGroup;
-			children = (
-				80796D021D35C01A00A728B3 /* AppDelegate.swift */,
-				80796D041D35C01A00A728B3 /* ViewController.swift */,
-				80796D091D35C01A00A728B3 /* Assets.xcassets */,
-				80796D0B1D35C01A00A728B3 /* Main.storyboard */,
-				80796D0E1D35C01A00A728B3 /* Info.plist */,
-				80796D061D35C01A00A728B3 /* Script.xcdatamodeld */,
-			);
-			path = Script;
 			sourceTree = "<group>";
 		};
 		80796D351D35C0FA00A728B3 /* Script-iOS */ = {
@@ -161,23 +114,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		80796CFE1D35C01900A728B3 /* Script */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 80796D271D35C01B00A728B3 /* Build configuration list for PBXNativeTarget "Script" */;
-			buildPhases = (
-				80796CFB1D35C01900A728B3 /* Sources */,
-				80796CFC1D35C01900A728B3 /* Frameworks */,
-				80796CFD1D35C01900A728B3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Script;
-			productName = Script;
-			productReference = 80796CFF1D35C01A00A728B3 /* Script.app */;
-			productType = "com.apple.product-type.application";
-		};
 		80796D331D35C0FA00A728B3 /* Script-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 80796D591D35C0FB00A728B3 /* Build configuration list for PBXNativeTarget "Script-iOS" */;
@@ -205,12 +141,6 @@
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Izumu Mishima";
 				TargetAttributes = {
-					80796CFE1D35C01900A728B3 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = N99JYD94C7;
-						DevelopmentTeamName = "Hisako Mishima";
-						ProvisioningStyle = Automatic;
-					};
 					80796D331D35C0FA00A728B3 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = N99JYD94C7;
@@ -233,34 +163,12 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				80796CFE1D35C01900A728B3 /* Script */,
 				80796D331D35C0FA00A728B3 /* Script-iOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		80796CFD1D35C01900A728B3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80796D0A1D35C01A00A728B3 /* Assets.xcassets in Resources */,
-				80F86CC21D368E2E0094D4B3 /* SFMono-Semibold.otf in Resources */,
-				80F86CB41D368E2E0094D4B3 /* SFMono-HeavyItalic.otf in Resources */,
-				80F86CBC1D368E2E0094D4B3 /* SFMono-MediumItalic.otf in Resources */,
-				80F86CC41D368E2E0094D4B3 /* SFMono-SemiboldItalic.otf in Resources */,
-				80F86CB81D368E2E0094D4B3 /* SFMono-LightItalic.otf in Resources */,
-				80796D0D1D35C01A00A728B3 /* Main.storyboard in Resources */,
-				80F86CB01D368E2E0094D4B3 /* SFMono-BoldItalic.otf in Resources */,
-				80F86CBE1D368E2E0094D4B3 /* SFMono-Regular.otf in Resources */,
-				80F86CB21D368E2E0094D4B3 /* SFMono-Heavy.otf in Resources */,
-				80F86CBA1D368E2E0094D4B3 /* SFMono-Medium.otf in Resources */,
-				80F86CB61D368E2E0094D4B3 /* SFMono-Light.otf in Resources */,
-				80F86CC01D368E2E0094D4B3 /* SFMono-RegularItalic.otf in Resources */,
-				80F86CAE1D368E2E0094D4B3 /* SFMono-Bold.otf in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		80796D321D35C0FA00A728B3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -286,17 +194,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		80796CFB1D35C01900A728B3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80796D631D35C17A00A728B3 /* jsEval.swift in Sources */,
-				80796D051D35C01A00A728B3 /* ViewController.swift in Sources */,
-				80796D031D35C01A00A728B3 /* AppDelegate.swift in Sources */,
-				80796D081D35C01A00A728B3 /* Script.xcdatamodeld in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		80796D301D35C0FA00A728B3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -310,14 +207,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		80796D0B1D35C01A00A728B3 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				80796D0C1D35C01A00A728B3 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		80796D3A1D35C0FA00A728B3 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -443,32 +332,6 @@
 			};
 			name = Release;
 		};
-		80796D281D35C01B00A728B3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Script/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Mishima.Script;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		80796D291D35C01B00A728B3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Script/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Mishima.Script;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
 		80796D5A1D35C0FB00A728B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -514,15 +377,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		80796D271D35C01B00A728B3 /* Build configuration list for PBXNativeTarget "Script" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				80796D281D35C01B00A728B3 /* Debug */,
-				80796D291D35C01B00A728B3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		80796D591D35C0FB00A728B3 /* Build configuration list for PBXNativeTarget "Script-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -533,19 +387,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		80796D061D35C01A00A728B3 /* Script.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				80796D071D35C01A00A728B3 /* Script.xcdatamodel */,
-			);
-			currentVersion = 80796D071D35C01A00A728B3 /* Script.xcdatamodel */;
-			path = Script.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 80796CF71D35C01800A728B3 /* Project object */;
 }
