@@ -42,6 +42,8 @@ class ViewController: UIViewController, UITextViewDelegate {
 	
 	let placeholderColour = UIColor(white: 1, alpha: 0.5)
 	
+	var lastEnteredCharacter: String = ""
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -164,10 +166,11 @@ class ViewController: UIViewController, UITextViewDelegate {
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		
+	
 		defer {
 			textView.isScrollEnabled = true
 			updateInputTextViewHeight()
+			lastEnteredCharacter = text
 		}
 		switch text {
 		case "{":
@@ -182,6 +185,10 @@ class ViewController: UIViewController, UITextViewDelegate {
 		case "\"":
 			textView.insertText("\"")
 			moveCursor(offset: -1)
+		case " ":
+			if lastEnteredCharacter == " " {
+				textView.insertText("  ")
+			}
 		case "\n":
 			guard characterBeforeCursor() != nil else {
 				return true
