@@ -134,7 +134,11 @@ class ViewController: UIViewController, UITextViewDelegate {
 				}
 			}
 			let font = [NSFontAttributeName: UIFont(name: normalFontName, size: fontSize)!, NSForegroundColorAttributeName: inputColour]
-			let text = NSAttributedString(string: "> " + inputTextView.text!, attributes: font)
+			var string = "> " + inputTextView.text!
+			if outputTextView.text != "" {
+				string = "\n" + string
+			}
+			let text = NSAttributedString(string: string, attributes: font)
 			textVText.append(text)
 			textVText.append(NSAttributedString(string: "\n"))
 			
@@ -160,6 +164,11 @@ class ViewController: UIViewController, UITextViewDelegate {
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+		
+		defer {
+			textView.isScrollEnabled = true
+			updateInputTextViewHeight()
+		}
 		switch text {
 		case "{":
 			textView.insertText("}")
@@ -174,24 +183,32 @@ class ViewController: UIViewController, UITextViewDelegate {
 			textView.insertText("\"")
 			moveCursor(offset: -1)
 		case "\n":
-			if let characterBeforeCursor = characterBeforeCursor() {
-				if characterBeforeCursor == "{" {
-					textView.isScrollEnabled = false
-					textView.insertText("\n")
-					let indentationLevel = getIndentationLevel()
-					for _ in 0..<indentationLevel{
-						textView.insertText("    ") //4 spaces
-					}
-					textView.insertText("\n")
-					for _ in 0..<indentationLevel - 1 {
-						textView.insertText("    ") //4 spaces
-					}
-					moveCursor(offset: -1 - (4 * (indentationLevel - 1)))
-					textView.isScrollEnabled = true
-					updateInputTextViewHeight()
-					return false
-				}
+			guard characterBeforeCursor() != nil else {
+				return true
 			}
+			let characterBefore = characterBeforeCursor()!
+			if characterBefore == "{" {
+				textView.isScrollEnabled = false
+				textView.insertText("\n")
+				let indentationLevel = getIndentationLevel()
+				for _ in 0..<indentationLevel{
+					textView.insertText("    ") //4 spaces
+				}
+				textView.insertText("\n")
+				for _ in 0..<indentationLevel - 1 {
+					textView.insertText("    ") //4 spaces
+				}
+				moveCursor(offset: -1 - (4 * (indentationLevel - 1)))
+				return false
+			} else if characterBefore != ";" {
+				textView.insertText(";")
+			}
+			textView.insertText("\n")
+			for _ in 0..<getIndentationLevel() {
+				textView.insertText("    ") //4 spaces
+			}
+			return false
+			
 		default:
 			break
 		}
@@ -248,7 +265,7 @@ class ViewController: UIViewController, UITextViewDelegate {
 			}
 		}
 		
-		return level
+		return max(0, level)
 	}
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {

@@ -226,11 +226,11 @@ func addMaths(jsContext: JSContext) {
 	_ = jsContext.evaluateScript("const round = function(x) { return Math.round(x) }")
 	_ = jsContext.evaluateScript("const sqrt = function(x) { return Math.sqrt(x) }")
 	
-	_ = jsContext.evaluateScript("const sin = function(deg) { return Math.sin(deg * pi / 180) }")
-	_ = jsContext.evaluateScript("const cos = function(deg) { return Math.cos(deg * pi / 180) }")
-	_ = jsContext.evaluateScript("const tan = function(deg) { return Math.tan(deg * pi/ 180) }")
-	_ = jsContext.evaluateScript("const asin = functionx) { return Math.asin(x) * 180 / pi }")
-	_ = jsContext.evaluateScript("const acos = function(x) { return Math.acos(x) * 180 / pi }")
-	_ = jsContext.evaluateScript("const atan = function(x) { return Math.atan(x) * 180 / pi }")
-	_ = jsContext.evaluateScript("const atan2 = function(x, y) { return Math.atan2(x,y) * 180 / pi }")
+	_ = jsContext.evaluateScript("const sin = function(x) { return Math.sin(x) }")
+	_ = jsContext.evaluateScript("const cos = function(x) { return Math.cos(x) }")
+	_ = jsContext.evaluateScript("const tan = function(x) { return Math.tan(x) }")
+	_ = jsContext.evaluateScript("const asin = function(x) { return Math.asin(x) }")
+	_ = jsContext.evaluateScript("const acos = function(x) { return Math.acos(x) }")
+	_ = jsContext.evaluateScript("const atan = function(x) { return Math.atan(x) }")
+	_ = jsContext.evaluateScript("const atan2 = function(x, y) { return Math.atan2(x,y) }")
 }
