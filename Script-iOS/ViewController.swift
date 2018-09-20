@@ -185,6 +185,9 @@ class ViewController: UIViewController, UITextViewDelegate {
 		case "\"":
 			textView.insertText("\"")
 			moveCursor(offset: -1)
+		case "\'":
+			textView.insertText("\'")
+			moveCursor(offset: -1)
 		case " ":
 			if lastEnteredCharacter == " " {
 				textView.insertText("  ")
