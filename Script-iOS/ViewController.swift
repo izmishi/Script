@@ -176,8 +176,20 @@ class ViewController: UIViewController, UITextViewDelegate {
 		case "\n":
 			if let characterBeforeCursor = characterBeforeCursor() {
 				if characterBeforeCursor == "{" {
-					textView.insertText("    \n")
-					moveCursor(offset: -1)
+					textView.isScrollEnabled = false
+					textView.insertText("\n")
+					let indentationLevel = getIndentationLevel()
+					for _ in 0..<indentationLevel{
+						textView.insertText("    ") //4 spaces
+					}
+					textView.insertText("\n")
+					for _ in 0..<indentationLevel - 1 {
+						textView.insertText("    ") //4 spaces
+					}
+					moveCursor(offset: -1 - (4 * (indentationLevel - 1)))
+					textView.isScrollEnabled = true
+					updateInputTextViewHeight()
+					return false
 				}
 			}
 		default:
@@ -224,6 +236,20 @@ class ViewController: UIViewController, UITextViewDelegate {
 		}
 	}
 	
+	func getIndentationLevel() -> Int {
+		var level: Int = 0
+		
+		var text = inputTextView.text(in: inputTextView.textRange(from: inputTextView.beginningOfDocument, to: (inputTextView.selectedTextRange?.start)!)!)!
+		for character in text {
+			if character == "{" {
+				level += 1
+			} else if character == "}" {
+				level -= 1
+			}
+		}
+		
+		return level
+	}
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return UIStatusBarStyle.lightContent
