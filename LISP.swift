@@ -740,7 +740,7 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 				}
 				return Expression(closure)
 			} else {
-				if let proc = env.symbols[firstSymbol] {
+				if let proc = try env.find(symbol: firstSymbol)!.symbols[firstSymbol] {
 					var args = list
 					let arguments = try args[1..<args.count].map { try evaluate(Expression($0), environment: env).value }
 					return try proc([list[0]] + arguments as [Any])
