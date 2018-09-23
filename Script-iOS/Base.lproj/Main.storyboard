@@ -46,17 +46,21 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JavaScript" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIb-Xh-6U2">
-                                            <rect key="frame" x="117.5" y="20" width="85" height="30"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLM-8o-bze">
+                                            <rect key="frame" x="8" y="16" width="304" height="34"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                            <state key="normal" title="Javascript"/>
+                                            <connections>
+                                                <action selector="languageButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5WM-Vm-gf4"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="hIb-Xh-6U2" firstAttribute="centerX" secondItem="xPP-q1-1mS" secondAttribute="centerX" id="1p0-2J-k6a"/>
-                                        <constraint firstItem="hIb-Xh-6U2" firstAttribute="top" secondItem="xPP-q1-1mS" secondAttribute="top" constant="20" id="O8q-3p-95E"/>
-                                        <constraint firstAttribute="bottom" secondItem="hIb-Xh-6U2" secondAttribute="bottom" id="nGL-D2-RGo"/>
+                                        <constraint firstAttribute="trailing" secondItem="yLM-8o-bze" secondAttribute="trailing" constant="8" id="FR6-yd-6yR"/>
+                                        <constraint firstItem="yLM-8o-bze" firstAttribute="top" secondItem="xPP-q1-1mS" secondAttribute="top" constant="16" id="Fwy-gh-CBb"/>
+                                        <constraint firstAttribute="bottom" secondItem="yLM-8o-bze" secondAttribute="bottom" id="L0B-Ed-KOO"/>
+                                        <constraint firstItem="yLM-8o-bze" firstAttribute="leading" secondItem="xPP-q1-1mS" secondAttribute="leading" constant="8" id="lGf-c2-Rnh"/>
+                                        <constraint firstItem="yLM-8o-bze" firstAttribute="centerX" secondItem="xPP-q1-1mS" secondAttribute="centerX" id="ohb-ta-xgu"/>
                                     </constraints>
                                 </view>
                                 <constraints>
@@ -65,7 +69,7 @@
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" text="&gt;" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="chG-Ge-gy2">
-                                <rect key="frame" x="8" y="524" width="274" height="36"/>
+                                <rect key="frame" x="8" y="524" width="268" height="36"/>
                                 <color key="backgroundColor" white="0.20021634615384615" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="o8V-BM-YeF"/>
@@ -75,10 +79,10 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zuy-wd-45q">
-                                <rect key="frame" x="282" y="524" width="30" height="36"/>
+                                <rect key="frame" x="276" y="524" width="36" height="36"/>
                                 <color key="backgroundColor" white="0.20021634620000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="nsJ-E0-rXd"/>
+                                    <constraint firstAttribute="width" constant="36" id="nsJ-E0-rXd"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="⬆︎"/>
@@ -111,6 +115,7 @@
                         <outlet property="enterButton" destination="Zuy-wd-45q" id="oMk-6Q-gtE"/>
                         <outlet property="inputTextView" destination="chG-Ge-gy2" id="W4N-wl-gQB"/>
                         <outlet property="inputTextViewHeight" destination="o8V-BM-YeF" id="0qf-51-BFa"/>
+                        <outlet property="languageButton" destination="yLM-8o-bze" id="yb0-J0-FFl"/>
                         <outlet property="outputTextView" destination="aeQ-c3-D9c" id="U2n-rq-6vv"/>
                         <outlet property="topBar" destination="xPP-q1-1mS" id="RMo-wI-hHq"/>
                     </connections>

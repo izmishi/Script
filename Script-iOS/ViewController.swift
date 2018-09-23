@@ -9,6 +9,8 @@
 import UIKit
 import JavaScriptCore
 
+let orange = UIColor(red: 1, green: 80.0/255, blue: 0, alpha: 1)
+
 let inputColour = UIColor.white
 let printColour = UIColor(white: 0.6, alpha: 1)
 let outputColour = UIColor(red: 0, green: 0.7, blue: 0.7, alpha: 1)
@@ -27,6 +29,12 @@ func appendMessage(message: String, print: Bool = false) {
 	}
 }
 
+enum Language {
+	case javascript
+	case lisp
+}
+
+
 class ViewController: UIViewController, UITextViewDelegate {
 	
 	@IBOutlet var outputTextView: UITextView!
@@ -35,8 +43,10 @@ class ViewController: UIViewController, UITextViewDelegate {
 	@IBOutlet var bottomLayoutConstraint: NSLayoutConstraint!
 	@IBOutlet var inputTextViewHeight: NSLayoutConstraint!
 	@IBOutlet var enterButton: UIButton!
+	@IBOutlet var languageButton: UIButton!
 	
 	let jsContext = JSContext()
+	var lispGlobalEnvironment = Environment()
 	var topInset: CGFloat = 0
 	let margin: CGFloat = 8
 	
@@ -44,18 +54,22 @@ class ViewController: UIViewController, UITextViewDelegate {
 	
 	var lastEnteredCharacter: String = ""
 	
+	var language: Language = .lisp
+	var tintColours: [Language: UIColor] = [.lisp: .white, .javascript: orange]
+	
+	var languageOutputTexts: [Language: NSMutableAttributedString] = [.lisp: NSMutableAttributedString(string: ""), .javascript: NSMutableAttributedString(string: "")]
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		if inputColour != .white {
-			view.tintColor = inputColour
-		}
+		view.tintColor = tintColours[language]
+		languageButton.setTitle(language == .javascript ? "Javascript" : "Lisp", for: .normal)
 		inputTextView.delegate = self
 		outputTextView.attributedText = NSAttributedString(string: "")
 		let notificationCenter = NotificationCenter.default
 		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: .UIKeyboardWillShow, object: nil);
 		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil);
-		view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
+		outputTextView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
 		setNeedsStatusBarAppearanceUpdate()
 		inputTextView.font = UIFont(name: normalFontName, size: fontSize + 2)
 		inputTextView.textColor = placeholderColour
@@ -115,10 +129,77 @@ class ViewController: UIViewController, UITextViewDelegate {
 	}
 	
 	func textViewShouldReturn(_ textView: UITextView) -> Bool {
-		return jsEntered()
+		return evaluateInput()
 	}
 	@IBAction func enterButtonPressed(_ sender: Any) {
-		_ = jsEntered()
+		_ = evaluateInput()
+	}
+	@IBAction func languageButtonPressed(_ sender: Any) {
+		UIView.setAnimationsEnabled(false)
+		if language == .javascript {
+			languageOutputTexts[.javascript] = textVText
+			textVText = languageOutputTexts[.lisp]!
+			language = .lisp
+			languageButton.setTitle("Lisp", for: .normal)
+		} else {
+			languageOutputTexts[.lisp] = textVText
+			textVText = languageOutputTexts[.javascript]!
+			language = .javascript
+			languageButton.setTitle("Javascript", for: .normal)
+		}
+		view.tintColor = tintColours[language]
+		UIView.setAnimationsEnabled(true)
+		outputTextView.attributedText = textVText as NSAttributedString
+		scrollToBottom(outputTextView)
+	}
+	
+	func evaluateInput() -> Bool {
+		if let input = inputTextView.text {
+			guard !input.isEmpty else {
+				return true
+			}
+			guard inputTextView.isFirstResponder else {
+				return true
+			}
+			addInputToTextView()
+			switch language {
+			case .javascript:
+				_ = jsEntered()
+			case .lisp:
+				evaluateLisp(input: input)
+			}
+			
+			outputTextView.attributedText = textVText as NSAttributedString
+			scrollToBottom(outputTextView)
+			inputTextView.text = ""
+			updateInputTextViewHeight()
+		}
+		return true
+	}
+	
+	func addInputToTextView() {
+		let font = [NSFontAttributeName: UIFont(name: normalFontName, size: fontSize)!, NSForegroundColorAttributeName: inputColour]
+		var string = "> " + inputTextView.text!
+		if outputTextView.text != "" {
+			string = "\n" + string
+		}
+		let text = NSAttributedString(string: string, attributes: font)
+		textVText.append(text)
+		textVText.append(NSAttributedString(string: "\n"))
+	}
+	
+	func evaluateLisp(input: String) {
+		do {
+			let parsed = try parse(input)
+			let evaluated = eval(lists: parsed.value as! List, environment: lispGlobalEnvironment)
+			for output in evaluated {
+				appendMessage(message: "\(output)")
+			}
+		} catch LispError.parseError {
+			appendMessage(message: "Could not parse input")
+		} catch {
+			appendMessage(message: "Unknown Error")
+		}
 	}
 	
 	func jsEntered() -> Bool {
@@ -135,24 +216,8 @@ class ViewController: UIViewController, UITextViewDelegate {
 					return true
 				}
 			}
-			let font = [NSFontAttributeName: UIFont(name: normalFontName, size: fontSize)!, NSForegroundColorAttributeName: inputColour]
-			var string = "> " + inputTextView.text!
-			if outputTextView.text != "" {
-				string = "\n" + string
-			}
-			let text = NSAttributedString(string: string, attributes: font)
-			textVText.append(text)
-			textVText.append(NSAttributedString(string: "\n"))
 			
 			_ = jsEval(script: inputTextView.text!, context: jsContext!)
-			
-			outputTextView.attributedText = textVText as NSAttributedString
-			
-			scrollToBottom(outputTextView)
-			
-			inputTextView.text = ""
-			
-			updateInputTextViewHeight()
 		}
 		return true
 	}
@@ -173,54 +238,60 @@ class ViewController: UIViewController, UITextViewDelegate {
 			lastEnteredCharacter = text
 		}
 		switch text {
-		case "{":
-			textView.insertText("}")
-			moveCursor(offset: -1)
 		case "(":
 			textView.insertText(")")
-			moveCursor(offset: -1)
-		case "[":
-			textView.insertText("]")
-			moveCursor(offset: -1)
-		case "\"":
-			textView.insertText("\"")
-			moveCursor(offset: -1)
-		case "\'":
-			textView.insertText("\'")
 			moveCursor(offset: -1)
 		case " ":
 			if lastEnteredCharacter == " " {
 				textView.insertText("  ")
 			}
-		case "\n":
-			guard characterBeforeCursor() != nil else {
-				return true
-			}
-			let characterBefore = characterBeforeCursor()!
-			if characterBefore == "{" {
-				textView.isScrollEnabled = false
-				textView.insertText("\n")
-				let indentationLevel = getIndentationLevel()
-				for _ in 0..<indentationLevel{
-					textView.insertText("    ") //4 spaces
-				}
-				textView.insertText("\n")
-				for _ in 0..<indentationLevel - 1 {
-					textView.insertText("    ") //4 spaces
-				}
-				moveCursor(offset: -1 - (4 * (indentationLevel - 1)))
-				return false
-			} else if ![";", "}", "\n"].contains(characterBefore){
-				textView.insertText(";")
-			}
-			textView.insertText("\n")
-			for _ in 0..<getIndentationLevel() {
-				textView.insertText("    ") //4 spaces
-			}
-			return false
-			
 		default:
 			break
+		}
+		if language == .javascript {
+			switch text {
+			case "{":
+				textView.insertText("}")
+				moveCursor(offset: -1)
+			case "[":
+				textView.insertText("]")
+				moveCursor(offset: -1)
+			case "\"":
+				textView.insertText("\"")
+				moveCursor(offset: -1)
+			case "\'":
+				textView.insertText("\'")
+				moveCursor(offset: -1)
+			case "\n":
+				guard characterBeforeCursor() != nil else {
+					return true
+				}
+				let characterBefore = characterBeforeCursor()!
+				if characterBefore == "{" {
+					textView.isScrollEnabled = false
+					textView.insertText("\n")
+					let indentationLevel = getIndentationLevel()
+					for _ in 0..<indentationLevel{
+						textView.insertText("    ") //4 spaces
+					}
+					textView.insertText("\n")
+					for _ in 0..<indentationLevel - 1 {
+						textView.insertText("    ") //4 spaces
+					}
+					moveCursor(offset: -1 - (4 * (indentationLevel - 1)))
+					return false
+				} else if ![";", "}", "\n"].contains(characterBefore){
+					textView.insertText(";")
+				}
+				textView.insertText("\n")
+				for _ in 0..<getIndentationLevel() {
+					textView.insertText("    ") //4 spaces
+				}
+				return false
+				
+			default:
+				break
+			}
 		}
 		return true
 	}
