@@ -245,6 +245,9 @@ class ViewController: UIViewController, UITextViewDelegate {
 			if lastEnteredCharacter == " " {
 				textView.insertText("  ")
 			}
+		case "\"":
+			textView.insertText("\"")
+			moveCursor(offset: -1)
 		default:
 			break
 		}
@@ -255,9 +258,6 @@ class ViewController: UIViewController, UITextViewDelegate {
 				moveCursor(offset: -1)
 			case "[":
 				textView.insertText("]")
-				moveCursor(offset: -1)
-			case "\"":
-				textView.insertText("\"")
 				moveCursor(offset: -1)
 			case "\'":
 				textView.insertText("\'")

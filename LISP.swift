@@ -91,7 +91,7 @@ struct Atom: CustomStringConvertible {
 	}
 	
 	var value: Any? {
-		return (values.number != nil ? values.number! : (values.symbol != nil ? values.symbol! : values.bool) as Any?)
+		return (values.number != nil ? values.number! : (values.symbol != nil ? values.symbol! : values.bool!) as Any?)
 	}
 	
 	init(_ bool: Bool) {
@@ -138,7 +138,7 @@ struct Expression: CustomStringConvertible {
 	private var values: (atom: Atom?, list: List?, closure: LispClosure?)!
 	
 	var value: Any? {
-		return values.list != nil ? values.list! : (values.atom != nil ? values.atom!.value : values.closure) as Any?
+		return values.list != nil ? values.list! : (values.atom != nil ? values.atom!.value : values.closure!) as Any?
 	}
 	
 	init(_ atom: Atom) {
@@ -176,7 +176,7 @@ struct Expression: CustomStringConvertible {
 			}
 			return values.list!.description
 		} else if values.closure != nil {
-			return "Closure"
+			return "#<Closure>"
 		} else {
 			return "nil"
 		}
@@ -531,7 +531,7 @@ class Environment {
 					numberArray.append(num)
 				}
 			} else {
-				throw LispError.typeError(message: "Expected a number, but got \(thing)")
+				throw LispError.typeError(message: "Expected a number, but got \(Expression(thing))")
 			}
 		}
 		return numberArray
@@ -547,7 +547,7 @@ class Environment {
 					boolArray.append(num)
 				}
 			} else {
-				throw LispError.typeError(message: "Expected a boolean value, but got \(thing)")
+				throw LispError.typeError(message: "Expected a boolean value, but got \(Expression(thing))")
 			}
 			
 		}
@@ -655,21 +655,17 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 				guard list[1] is Symbol else {
 					throw LispError.typeError(message: "Expected a symbol, but got \(list[1])")
 				}
-				if let value = Expression(list[2]).value {
-					if let symbol = value as? Symbol {
-						if let val = try env.find(symbol: symbol)?.symbols[symbol] {
-							env.symbols[list[1] as! Symbol] = val
-							return try evaluate(Expression(value), environment: env)
-						}
-					}
-					env.symbols[list[1] as! Symbol] = { (_ array: List) -> Expression in
+				
+				let symbol = list[1] as! Symbol
+				if let _ = Expression(list[2]).value {
+					env.symbols[symbol] = { (_ array: List) -> Expression in
 						let evaluated = try evaluate(Expression(list[2]), environment: env)
 						if let closure = evaluated.value as? LispClosure {
 							return try closure(array)
 						}
 						return evaluated
 					}
-					return try env.symbols[list[1] as! Symbol]!([])
+					return Expression(env.symbols[symbol]!)
 				} else {
 					throw LispError.typeError(message: "Expected an expression")
 				}
@@ -681,39 +677,16 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 					throw LispError.typeError(message: "Expected a symbol, but got \(list[1])")
 				}
 				
-				
-				//				let symbol = list[1] as! Symbol
-				//				if let environmentOfSymbol = try env.find(symbol: symbol) {
-				//					do {
-				//						let evaluated = try evaluate(Expression(list[2]), environment: environmentOfSymbol)
-				//						let val = { (_ arr: List) -> Expression in
-				//							return evaluated
-				//						}
-				//						environmentOfSymbol.symbols[symbol] = val
-				//						return try evaluate(Expression(val([])), environment: environmentOfSymbol)
-				//					} catch {
-				//						throw LispError.undefinedError(message: "")
-				//					}
-				//				} else {
-				//					throw LispError.undefinedError(message: "")
-				//				}
-				
-				
-				if let value = Expression(list[2]).value {
-					if let symbol = value as? Symbol {
-						if let val = try env.find(symbol: symbol)?.symbols[symbol] {
-							env.symbols[list[1] as! Symbol] = val
-							return try evaluate(Expression(value), environment: env)
-						}
-					}
-					try env.find(symbol: list[1] as! Symbol)!.symbols[list[1] as! Symbol] = { (_ array: List) -> Expression in
+				let symbol = list[1] as! Symbol
+				if let _ = Expression(list[2]).value {
+					try env.find(symbol: symbol)!.symbols[symbol] = { (_ array: List) -> Expression in
 						let evaluated = try evaluate(Expression(list[2]), environment: env)
 						if let closure = evaluated.value as? LispClosure {
 							return try closure(array)
 						}
 						return evaluated
 					}
-					return try env.find(symbol: list[1] as! Symbol)!.symbols[list[1] as! Symbol]!([])
+					return try Expression(env.find(symbol: symbol)!.symbols[symbol]!)
 				} else {
 					throw LispError.typeError(message: "Expected an expression")
 				}
@@ -729,9 +702,9 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 				guard Expression(list[1]).value is List else {
 					throw LispError.typeError(message: "Expected a list, but got \(list[1])")
 				}
-				guard list[2] is Expression else {
-					throw LispError.typeError(message: "Expected an expression")
-				}
+				//				guard list[2] is Expression else {
+				//					throw LispError.typeError(message: "Expected an expression")
+				//				}
 				let closure = { (_ clist: List) -> Expression in
 					guard clist.count > 0 else {
 						throw LispMessage.typeDescription("Closure")
@@ -742,8 +715,8 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 			} else {
 				if let proc = try env.find(symbol: firstSymbol)!.symbols[firstSymbol] {
 					var args = list
-					let arguments = try args[1..<args.count].map { try evaluate(Expression($0), environment: env).value }
-					return try proc([list[0]] + arguments as [Any])
+					let arguments = try args[1..<args.count].map { try evaluate(Expression($0), environment: env).value! }
+					return try proc([list[0]] + arguments)
 				} else {
 					throw LispError.undefinedError(message: "\(firstSymbol) is not a symbol")
 				}
@@ -758,8 +731,12 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 			let atom = Atom(value)
 			//Variable Reference
 			if atom.type == .symbol {
-				//Symbol
 				let symbol = atom.value as! Symbol
+				//String
+				if symbol.hasPrefix("\"") && symbol.hasSuffix("\"") {
+					return Expression(symbol)
+				}
+				//Symbol
 				do {
 					return try env.find(symbol: symbol)!.getExpressionFor(symbol: symbol)
 				} catch LispError.undefinedError(let message) {
@@ -790,7 +767,7 @@ func eval(lists: List, environment: Environment) -> [Any] {
 		} catch LispError.tooFewArguments(let minimumNumberOfArguments) {
 			outputs.append("Too few arguments. Should have at least \(minimumNumberOfArguments) argument" + (minimumNumberOfArguments == 1 ? "" : "s"))
 		} catch LispError.noCar {
-			outputs.append("no car")
+			outputs.append("No car")
 		} catch LispError.typeError(let message) {
 			outputs.append(message)
 		} catch LispMessage.typeDescription(let description) {
@@ -802,7 +779,7 @@ func eval(lists: List, environment: Environment) -> [Any] {
 		}
 	}
 	for i in 0..<outputs.count {
-		outputs[i] = outputs[i].replacingOccurrences(of: "[", with: "(").replacingOccurrences(of: "]", with: ")").replacingOccurrences(of: ", ", with: " ").replacingOccurrences(of: "\"", with: "")
+		outputs[i] = outputs[i].replacingOccurrences(of: "[", with: "(").replacingOccurrences(of: "]", with: ")")
 	}
 	return outputs
 }
