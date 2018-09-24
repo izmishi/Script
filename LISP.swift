@@ -828,7 +828,7 @@ func eval(lists: List, environment: Environment) -> [Any] {
 		}
 	}
 	for i in 0..<outputs.count {
-		outputs[i] = outputs[i].replacingOccurrences(of: "[", with: "(").replacingOccurrences(of: "]", with: ")")
+		outputs[i] = outputs[i].replacingOccurrences(of: "[", with: "(").replacingOccurrences(of: "]", with: ")").replacingOccurrences(of: ", ", with: " ")
 	}
 	return outputs
 }
