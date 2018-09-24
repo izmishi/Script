@@ -29,7 +29,7 @@ cond
 case
 and
 or
-begin
+/begin
 named let
 delay
 unquote
@@ -221,6 +221,14 @@ class Environment {
 	}
 	
 	private func setUp() {
+		//Syntax
+		for symbol in ["define", "set!", "if", "quote", "lambda", "begin"] {
+			symbols[symbol] = {(_ list: List) -> Expression in
+				throw LispMessage.typeDescription("Syntax \(symbol)")
+			}
+		}
+		
+		//Functions
 		symbols["list"] = {(_ list: List) -> Expression in
 			guard list.count > 0 else {
 				throw LispMessage.typeDescription("Function (list x...)")
@@ -456,6 +464,34 @@ class Environment {
 			}
 			return Expression(x[0].truncatingRemainder(dividingBy: x[1]))
 		}
+		symbols["max"] = {(_ array: List) -> Expression in
+			guard array.count > 0 else {
+				throw LispMessage.typeDescription("Function (max x...)")
+			}
+			let arr = try self.getNumbers(from: array)
+			if arr.count == 0 {
+				throw LispError.tooFewArguments(shouldBeAtLeast: 1)
+			}
+			if let max = arr.max() {
+				return Expression(max)
+			} else {
+				throw LispError.evaluationError(message: "Couldn't find the maximum of \(arr)")
+			}
+		}
+		symbols["min"] = {(_ array: List) -> Expression in
+			guard array.count > 0 else {
+				throw LispMessage.typeDescription("Function (min x...)")
+			}
+			let arr = try self.getNumbers(from: array)
+			if arr.count == 0 {
+				throw LispError.tooFewArguments(shouldBeAtLeast: 1)
+			}
+			if let min = arr.min() {
+				return Expression(min)
+			} else {
+				throw LispError.evaluationError(message: "Couldn't find the minimum of \(arr)")
+			}
+		}
 		
 		symbols["<"] = {(_ array: List) -> Expression in
 			guard array.count > 0 else {
@@ -527,8 +563,10 @@ class Environment {
 			if let number = thing as? Number {
 				numberArray.append(number)
 			} else if let symbol = thing as? Symbol {
-				if let num = try symbols[symbol]!([]).value as? Number {
+				if let num = try symbols[symbol]?([]).value as? Number {
 					numberArray.append(num)
+				} else {
+					throw LispError.typeError(message: "Expected a number, but got \(Expression(thing))")
 				}
 			} else {
 				throw LispError.typeError(message: "Expected a number, but got \(Expression(thing))")
@@ -543,8 +581,10 @@ class Environment {
 			if let number = thing as? Bool {
 				boolArray.append(number)
 			} else if let symbol = thing as? Symbol {
-				if let num = try symbols[symbol]!([]).value as? Bool {
+				if let num = try symbols[symbol]?([]).value as? Bool {
 					boolArray.append(num)
+				} else {
+					throw LispError.typeError(message: "Expected a boolean value, but got \(Expression(thing))")
 				}
 			} else {
 				throw LispError.typeError(message: "Expected a boolean value, but got \(Expression(thing))")
@@ -658,8 +698,8 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 				
 				let symbol = list[1] as! Symbol
 				if let _ = Expression(list[2]).value {
+					let evaluated = try evaluate(Expression(list[2]), environment: env)
 					env.symbols[symbol] = { (_ array: List) -> Expression in
-						let evaluated = try evaluate(Expression(list[2]), environment: env)
 						if let closure = evaluated.value as? LispClosure {
 							return try closure(array)
 						}
@@ -679,8 +719,8 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 				
 				let symbol = list[1] as! Symbol
 				if let _ = Expression(list[2]).value {
+					let evaluated = try evaluate(Expression(list[2]), environment: env)
 					try env.find(symbol: symbol)!.symbols[symbol] = { (_ array: List) -> Expression in
-						let evaluated = try evaluate(Expression(list[2]), environment: env)
 						if let closure = evaluated.value as? LispClosure {
 							return try closure(array)
 						}
@@ -712,6 +752,15 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 					return try Procedure(params: Expression(list[1]).value as! [Symbol], bdy: Expression(list[2]), env: env).call(with: Array(clist[1..<clist.count]), env: env)
 				}
 				return Expression(closure)
+			} else if firstSymbol == "begin" {
+				guard list.count >= 2 else {
+					throw LispError.tooFewArguments(shouldBeAtLeast: 1)
+				}
+				var toReturn: Expression!
+				for expression in list[1..<list.count] {
+					toReturn = try evaluate(Expression(expression), environment: env)
+				}
+				return toReturn
 			} else {
 				if let proc = try env.find(symbol: firstSymbol)!.symbols[firstSymbol] {
 					var args = list
