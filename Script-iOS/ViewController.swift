@@ -22,8 +22,8 @@ func appendMessage(message: String, print: Bool = false) {
 		let stringToAppend = message
 		let msgColour = print ? printColour : outputColour
 		let fontName = print ? normalFontName : "SFMono-Bold"
-		let msgFont = [NSFontAttributeName: UIFont(name: fontName, size: fontSize)!, NSForegroundColorAttributeName: msgColour]
-		let msgText = NSAttributedString(string: stringToAppend, attributes: msgFont)
+		let msgFont = [convertFromNSAttributedStringKey(NSAttributedString.Key.font): UIFont(name: fontName, size: fontSize)!, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): msgColour]
+		let msgText = NSAttributedString(string: stringToAppend, attributes: convertToOptionalNSAttributedStringKeyDictionary(msgFont))
 		textVText.append(msgText)
 		textVText.append(NSAttributedString(string: "\n"))
 	}
@@ -67,8 +67,8 @@ class ViewController: UIViewController, UITextViewDelegate {
 		inputTextView.delegate = self
 		outputTextView.attributedText = NSAttributedString(string: "")
 		let notificationCenter = NotificationCenter.default
-		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: .UIKeyboardWillShow, object: nil);
-		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil);
+		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil);
+		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil);
 		outputTextView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
 		setNeedsStatusBarAppearanceUpdate()
 		inputTextView.font = UIFont(name: normalFontName, size: fontSize + 2)
@@ -93,7 +93,7 @@ class ViewController: UIViewController, UITextViewDelegate {
 		print(inputTextView.frame)
 	}
 	
-	func dismissKeyboard() {
+	@objc func dismissKeyboard() {
 		inputTextView.resignFirstResponder()
 	}
 	
@@ -103,7 +103,7 @@ class ViewController: UIViewController, UITextViewDelegate {
 	}
 	
 	func animateTextView(duration: TimeInterval, curve: UInt, constant: CGFloat) {
-		UIView.animate(withDuration: duration, delay: 0, options: UIViewAnimationOptions(rawValue: curve), animations: {
+		UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
 			self.bottomLayoutConstraint.constant = constant
 //			self.textViewTopLayout.constant = -20 - (constant - self.margin)
 //			self.textView.contentInset.top = self.topInset + (constant - self.margin)
@@ -112,19 +112,19 @@ class ViewController: UIViewController, UITextViewDelegate {
 			}, completion: nil)
 	}
 	
-	func keyboardWillShow(notification: NSNotification) {
-		let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-		let curve = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as! UInt
-		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+	@objc func keyboardWillShow(notification: NSNotification) {
+		let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! TimeInterval
+		let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as! UInt
+		if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
 			let dY = keyboardSize.height
 			animateTextView(duration: duration, curve: curve, constant: dY + margin)
 		}
 		scrollToBottom(outputTextView)
 	}
 	
-	func keyboardWillHide(notification: NSNotification) {
-		let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-		let curve = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as! UInt
+	@objc func keyboardWillHide(notification: NSNotification) {
+		let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! TimeInterval
+		let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as! UInt
 		animateTextView(duration: duration, curve: curve, constant: margin)
 	}
 	
@@ -178,12 +178,12 @@ class ViewController: UIViewController, UITextViewDelegate {
 	}
 	
 	func addInputToTextView() {
-		let font = [NSFontAttributeName: UIFont(name: normalFontName, size: fontSize)!, NSForegroundColorAttributeName: inputColour]
+		let font = [convertFromNSAttributedStringKey(NSAttributedString.Key.font): UIFont(name: normalFontName, size: fontSize)!, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): inputColour]
 		var string = "> " + inputTextView.text!
 		if outputTextView.text != "" {
 			string = "\n" + string
 		}
-		let text = NSAttributedString(string: string, attributes: font)
+		let text = NSAttributedString(string: string, attributes: convertToOptionalNSAttributedStringKeyDictionary(font))
 		textVText.append(text)
 		textVText.append(NSAttributedString(string: "\n"))
 	}
@@ -337,7 +337,7 @@ class ViewController: UIViewController, UITextViewDelegate {
 	func getIndentationLevel() -> Int {
 		var level: Int = 0
 		
-		var text = inputTextView.text(in: inputTextView.textRange(from: inputTextView.beginningOfDocument, to: (inputTextView.selectedTextRange?.start)!)!)!
+		let text = inputTextView.text(in: inputTextView.textRange(from: inputTextView.beginningOfDocument, to: (inputTextView.selectedTextRange?.start)!)!)!
 		for character in text {
 			if character == "{" {
 				level += 1
@@ -354,3 +354,14 @@ class ViewController: UIViewController, UITextViewDelegate {
 	}
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}

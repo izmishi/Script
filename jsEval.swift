@@ -22,10 +22,10 @@ func getVariableName(script: String, context: JSContext) -> String? {
 		var str = script
 		if script.hasPrefix("var ") {
 			let index = script.index(script.startIndex, offsetBy: 4)
-			str = script[index..<script.endIndex]
+			str = String(script[index..<script.endIndex])
 		} else if script.hasPrefix("const ") {
 			let index = script.index(script.startIndex, offsetBy: 6)
-			str = script[index..<script.endIndex]
+			str = String(script[index..<script.endIndex])
 		}
 		var charArr: [Character] = []
 		for char in str {
@@ -34,7 +34,7 @@ func getVariableName(script: String, context: JSContext) -> String? {
 		for i in 0..<charArr.count {
 			if charArr[i] == "=" {
 				if i > 0 {
-					str = str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)]
+					str = String(str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)])
 					//				if context.evaluateScript(str) != JSValue.init(undefinedIn: context) {
 					return str.replacingOccurrences(of: " ", with: "")
 				}
@@ -61,11 +61,11 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 			if charArr[i] == "(" {
 				k = i
 				if i > 0 {
-					funcName = str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)]
+					funcName = String(str[str.startIndex...str.index(str.startIndex, offsetBy: i - 1)])
 					funcName = funcName.replacingOccurrences(of: " ", with: "")
 				}
 			} else if charArr[i] == ")" {
-				parameterNames = str[str.index(str.startIndex, offsetBy: k + 1)..<str.index(str.startIndex, offsetBy: i)]
+				parameterNames = String(str[str.index(str.startIndex, offsetBy: k + 1)..<str.index(str.startIndex, offsetBy: i)])
 				if funcName != "" {
 					return (funcName, parameterNames)
 				}
@@ -118,7 +118,7 @@ func evaluateJS(script: String, context: JSContext) -> (eval: [JSValue], msg: St
 			for i in 0..<charArr.count {
 				if charArr[i] == "(" {
 					let s = script[script.startIndex..<script.index(script.startIndex, offsetBy: i)]
-					if !String(describing: context.evaluateScript(s)!).contains("return") && context.evaluateScript(s) != JSValue.init(undefinedIn: context){
+					if !String(describing: context.evaluateScript(String(s))!).contains("return") && context.evaluateScript(String(s)) != JSValue.init(undefinedIn: context){
 						message = ""
 						ev = true
 					}
@@ -159,7 +159,7 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 	
 	if ((script.contains(";") && !script.hasPrefix(";")) || (script.contains("\n"))) && !(script.hasPrefix("for ") && !(script.contains("}\n") || script.contains("};"))) {
 		while script.hasSuffix(";") || script.hasSuffix("\n") {
-			script = script[script.startIndex..<script.index(script.endIndex, offsetBy: -1)]
+			script = String(script[script.startIndex..<script.index(script.endIndex, offsetBy: -1)])
 		}
 		var semicolonIndices: [Int] = []
 		var charArr: [Character] = []
@@ -193,7 +193,7 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 		for j in 0...semicolonIndices.count {
 			let start = script.index(script.startIndex, offsetBy: j == 0 ? 0 : semicolonIndices[j - 1])
 			let end = script.index(script.startIndex, offsetBy: j < semicolonIndices.count ?  semicolonIndices[j] : script.count)
-			var (e, m) = evaluateJS(script: script[start..<end], context: context)
+			var (e, m) = evaluateJS(script: String(script[start..<end]), context: context)
 			eval.append(e[0])
 			message += "\(m)" //+ (j < semicolonIndices.count && m != "" ? "\n" : "")
 		}

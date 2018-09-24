@@ -148,7 +148,7 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = N99JYD94C7;
 						DevelopmentTeamName = "Hisako Mishima";
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -347,7 +347,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mishima.Script-iOS";
 				PRODUCT_NAME = Script;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -363,7 +364,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mishima.Script-iOS";
 				PRODUCT_NAME = Script;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
