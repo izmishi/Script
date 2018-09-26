@@ -12,7 +12,7 @@ Fundamental forms:
 /define
 /lambda
 /quote
-'
+/'
 /if
 define-syntax
 let-syntax
@@ -631,7 +631,7 @@ class Procedure {
 
 
 func tokenise(_ string: String) -> [String] {
-	return string.replacingOccurrences(of: "(", with: " ( ").replacingOccurrences(of: ")", with: " ) ").replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\t", with: " ").split(separator: " ").map {String($0)}
+	return string.replacingOccurrences(of: "(", with: " ( ").replacingOccurrences(of: ")", with: " ) ").replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\t", with: " ").replacingOccurrences(of: "\'", with: " \' ").split(separator: " ").map {String($0)}
 }
 
 func readFromTokens(_ tokensList: [String]) -> (expression: Expression, count: Int) {
@@ -655,7 +655,6 @@ func readFromTokens(_ tokensList: [String]) -> (expression: Expression, count: I
 			let toAppend = readFromTokens(Array(tokens[(i + 1)..<tokens.count]))
 			if shouldQuote {
 				list.append([Atom("quote").value! as Any, toAppend.expression])
-				shouldQuote = false
 			} else {
 				list.append(toAppend.expression)
 			}
@@ -665,9 +664,11 @@ func readFromTokens(_ tokensList: [String]) -> (expression: Expression, count: I
 			return (Expression(list), count)
 		} else if token == "\'" {
 			shouldQuote = true
+			continue
 		} else {
 			list.append(Atom(token).value! as Any)
 		}
+		shouldQuote = false
 	}
 	
 	return (Expression(list), count)

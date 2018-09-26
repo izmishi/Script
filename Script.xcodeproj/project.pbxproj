@@ -13,7 +13,7 @@
 		80796D3E1D35C0FA00A728B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80796D3D1D35C0FA00A728B3 /* Assets.xcassets */; };
 		80796D411D35C0FA00A728B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80796D3F1D35C0FA00A728B3 /* LaunchScreen.storyboard */; };
 		80796D641D35C17A00A728B3 /* jsEval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80796D621D35C17A00A728B3 /* jsEval.swift */; };
-		80CD6E6B215C49B000AEF615 /* LISP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80CD6E6A215C49AF00AEF615 /* LISP.swift */; };
+		80CD6E6D215C4E6000AEF615 /* LISP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80CD6E6C215C4E6000AEF615 /* LISP.swift */; };
 		80F86CAF1D368E2E0094D4B3 /* SFMono-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA21D368E2E0094D4B3 /* SFMono-Bold.otf */; };
 		80F86CB11D368E2E0094D4B3 /* SFMono-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA31D368E2E0094D4B3 /* SFMono-BoldItalic.otf */; };
 		80F86CB31D368E2E0094D4B3 /* SFMono-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80F86CA41D368E2E0094D4B3 /* SFMono-Heavy.otf */; };
@@ -37,7 +37,7 @@
 		80796D401D35C0FA00A728B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		80796D421D35C0FA00A728B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		80796D621D35C17A00A728B3 /* jsEval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = jsEval.swift; sourceTree = SOURCE_ROOT; };
-		80CD6E6A215C49AF00AEF615 /* LISP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LISP.swift; sourceTree = "<group>"; };
+		80CD6E6C215C4E6000AEF615 /* LISP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LISP.swift; sourceTree = "<group>"; };
 		80F86CA21D368E2E0094D4B3 /* SFMono-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFMono-Bold.otf"; sourceTree = "<group>"; };
 		80F86CA31D368E2E0094D4B3 /* SFMono-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFMono-BoldItalic.otf"; sourceTree = "<group>"; };
 		80F86CA41D368E2E0094D4B3 /* SFMono-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFMono-Heavy.otf"; sourceTree = "<group>"; };
@@ -97,7 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				80796D621D35C17A00A728B3 /* jsEval.swift */,
-				80CD6E6A215C49AF00AEF615 /* LISP.swift */,
+				80CD6E6C215C4E6000AEF615 /* LISP.swift */,
 				80F86CA21D368E2E0094D4B3 /* SFMono-Bold.otf */,
 				80F86CA31D368E2E0094D4B3 /* SFMono-BoldItalic.otf */,
 				80F86CA41D368E2E0094D4B3 /* SFMono-Heavy.otf */,
@@ -202,7 +202,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80796D391D35C0FA00A728B3 /* ViewController.swift in Sources */,
-				80CD6E6B215C49B000AEF615 /* LISP.swift in Sources */,
+				80CD6E6D215C4E6000AEF615 /* LISP.swift in Sources */,
 				80796D371D35C0FA00A728B3 /* AppDelegate.swift in Sources */,
 				80796D641D35C17A00A728B3 /* jsEval.swift in Sources */,
 			);
