@@ -1,6 +1,6 @@
 //
 //  LISP.swift
-//
+//  
 //
 //  Created by Izumu Mishima on 20/09/2018.
 //
@@ -643,6 +643,7 @@ func readFromTokens(_ tokensList: [String]) -> (expression: Expression, count: I
 	
 	var list: List = []
 	var count: Int = 0
+	var shouldQuote: Bool = false
 	
 	for i in 0..<tokens.count {
 		if i + 1 > tokens.count {
@@ -652,11 +653,18 @@ func readFromTokens(_ tokensList: [String]) -> (expression: Expression, count: I
 		count += 1
 		if token == "(" {
 			let toAppend = readFromTokens(Array(tokens[(i + 1)..<tokens.count]))
-			list.append(toAppend.expression)
+			if shouldQuote {
+				list.append([Atom("quote").value! as Any, toAppend.expression])
+				shouldQuote = false
+			} else {
+				list.append(toAppend.expression)
+			}
 			tokens.removeSubrange((i)..<(i + toAppend.count))
 			count += toAppend.count
 		} else if token == ")" {
 			return (Expression(list), count)
+		} else if token == "\'" {
+			shouldQuote = true
 		} else {
 			list.append(Atom(token).value! as Any)
 		}
@@ -672,7 +680,15 @@ func parse(_ program: String) throws -> Expression {
 	return readFromTokens(tokenise(program)).expression
 }
 
-func evaluate(_ exp: Expression, environment env: Environment) throws -> Expression {
+func evaluate(_ exp: Expression, environment env: Environment, quote: Bool = false) throws -> Expression {
+	if quote {
+		if let list = exp.value as? List {
+			return Expression(try list.map{ try evaluate(Expression($0), environment: env, quote: true) })
+		} else {
+			return Expression(exp)
+		}
+	}
+	
 	if let list = exp.value as? List {
 		if list.count == 0 {
 			return Expression([])
@@ -734,7 +750,7 @@ func evaluate(_ exp: Expression, environment env: Environment) throws -> Express
 				guard list.count == 2 else {
 					throw LispError.incorrectArgumentCount(shouldBe: 1)
 				}
-				return Expression(list[1])
+				return try evaluate(Expression(list[1]), environment: env, quote: true)
 			} else if firstSymbol == "lambda" {
 				guard list.count == 3 else {
 					throw LispError.incorrectArgumentCount(shouldBe: 2)
