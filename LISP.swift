@@ -645,19 +645,24 @@ func readFromTokens(_ tokensList: [String]) -> (expression: Expression, count: I
 	var count: Int = 0
 	var shouldQuote: Bool = false
 	
+	func addToList(thing: Any, quote: Bool) {
+		if quote {
+			list.append([Atom("quote").value! as Any, thing])
+		} else {
+			list.append(thing)
+		}
+	}
+	
 	for i in 0..<tokens.count {
 		if i + 1 > tokens.count {
 			break
 		}
 		let token = tokens[i]
 		count += 1
+		
 		if token == "(" {
 			let toAppend = readFromTokens(Array(tokens[(i + 1)..<tokens.count]))
-			if shouldQuote {
-				list.append([Atom("quote").value! as Any, toAppend.expression])
-			} else {
-				list.append(toAppend.expression)
-			}
+			addToList(thing: toAppend.expression, quote: shouldQuote)
 			tokens.removeSubrange((i)..<(i + toAppend.count))
 			count += toAppend.count
 		} else if token == ")" {
@@ -666,7 +671,7 @@ func readFromTokens(_ tokensList: [String]) -> (expression: Expression, count: I
 			shouldQuote = true
 			continue
 		} else {
-			list.append(Atom(token).value! as Any)
+			addToList(thing: Atom(token).value! as Any, quote: shouldQuote)
 		}
 		shouldQuote = false
 	}
