@@ -62,7 +62,8 @@ typealias Symbol = String
 typealias Number = Double
 typealias List = [Any]
 
-struct Atom: CustomStringConvertible {
+struct Atom: CustomStringConvertible, Equatable {
+	
 	private var values: (symbol: Symbol?, number: Number?, bool: Bool?)!
 	
 	var type: LispType {
@@ -75,6 +76,10 @@ struct Atom: CustomStringConvertible {
 		} else {
 			return .nilType
 		}
+	}
+	
+	static func == (lhs: Atom, rhs: Atom) -> Bool {
+		return lhs.values == rhs.values
 	}
 	
 	
@@ -134,8 +139,16 @@ struct Atom: CustomStringConvertible {
 	
 }
 
-struct Expression: CustomStringConvertible {
+struct Expression: CustomStringConvertible, Equatable {
 	private var values: (atom: Atom?, list: List?, closure: LispClosure?)!
+	
+	static func == (lhs: Expression, rhs: Expression) -> Bool {
+		guard lhs.values?.atom != nil && rhs.values?.atom != nil else {
+			return false
+		}
+		return lhs.values?.atom == rhs.values?.atom
+	}
+	
 	
 	var value: Any? {
 		return values.list != nil ? values.list! : (values.atom != nil ? values.atom!.value : values.closure!) as Any?
@@ -552,7 +565,55 @@ class Environment {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
 			return Expression(!args[0])
-			
+		}
+		
+		
+		//Refer to the same thing in memory
+		/*symbols["eq?"] = {(_ array: List) -> Expression in
+		guard array.count > 0 else {
+		throw LispMessage.typeDescription("Function (eq? a b)")
+		}
+		var args = array
+		guard args.count == 2 else {
+		throw LispError.incorrectArgumentCount(shouldBe: 2)
+		}
+		let eq: Bool = try self.getExpressionFor(symbol: "\(args[0])") == self.getExpressionFor(symbol: "\(args[1])")
+		return Expression(eq)
+		}*/
+		
+		//Same value
+		symbols["eqv?"] = {(_ array: List) -> Expression in
+			guard array.count > 0 else {
+				throw LispMessage.typeDescription("Function (eqv? a b)")
+			}
+			let args = array
+			guard args.count == 3 else {
+				throw LispError.incorrectArgumentCount(shouldBe: 2)
+			}
+			let eq: Bool = try evaluate(Expression(args[1]), environment: self) == evaluate(Expression(args[2]), environment: self)
+			return Expression(eq)
+		}
+		
+		//Compares if two lists are the same
+		symbols["equal?"] = {(_ array: List) -> Expression in
+			guard array.count > 0 else {
+				throw LispMessage.typeDescription("Function (equal? (list) (list))")
+			}
+			var args = try self.getLists(from: array)
+			guard args.count == 2 else {
+				throw LispError.incorrectArgumentCount(shouldBe: 2)
+			}
+			if args[0].count != args[1].count {
+				return Expression(false)
+			}
+			let a = args[0]
+			let b = args[1]
+			for i in 0..<a.count {
+				if try evaluate(Expression(a[i]), environment: self) != evaluate(Expression(b[i]), environment: self) {
+					return Expression(false)
+				}
+			}
+			return Expression(true)
 		}
 		
 	}
@@ -578,11 +639,11 @@ class Environment {
 	private func getBools(from list: List) throws -> [Bool] {
 		var boolArray: [Bool] = []
 		for thing in list[1..<list.count] {
-			if let number = thing as? Bool {
-				boolArray.append(number)
+			if let bool = thing as? Bool {
+				boolArray.append(bool)
 			} else if let symbol = thing as? Symbol {
-				if let num = try symbols[symbol]?([]).value as? Bool {
-					boolArray.append(num)
+				if let bool = try symbols[symbol]?([]).value as? Bool {
+					boolArray.append(bool)
 				} else {
 					throw LispError.typeError(message: "Expected a boolean value, but got \(Expression(thing))")
 				}
@@ -592,6 +653,25 @@ class Environment {
 			
 		}
 		return boolArray
+	}
+	
+	private func getLists(from list: List) throws -> [List] {
+		var listArray: [List] = []
+		for thing in list[1..<list.count] {
+			if let list = thing as? List {
+				listArray.append(list)
+			} else if let symbol = thing as? Symbol {
+				if let list = try symbols[symbol]?([]).value as? List {
+					listArray.append(list)
+				} else {
+					throw LispError.typeError(message: "Expected a list, but got \(Expression(thing))")
+				}
+			} else {
+				throw LispError.typeError(message: "Expected a list, but got \(Expression(thing))")
+			}
+			
+		}
+		return listArray
 	}
 	
 	func getExpressionFor(symbol: Symbol) throws -> Expression {
@@ -792,8 +872,17 @@ func evaluate(_ exp: Expression, environment env: Environment, quote: Bool = fal
 					throw LispError.undefinedError(message: "\(firstSymbol) is not a symbol")
 				}
 			}
+		} else if let firstNumber = list.first as? Number {
+			return Expression(list)
+		} else {
+			do {
+				let evaluatedList = try list.map{ try evaluate(Expression($0), environment: env) }
+				return Expression(evaluatedList)
+			} catch {
+				throw LispError.evaluationError(message: "\(list[0]) is not a symbol")
+			}
+			
 		}
-		throw LispError.evaluationError(message: "\(list[0]) is not a symbol")
 	} else {
 		if let value = exp.value {
 			if let closure = value as? LispClosure {

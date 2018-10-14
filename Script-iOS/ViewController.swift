@@ -64,6 +64,7 @@ class ViewController: UIViewController, UITextViewDelegate {
 		
 		view.tintColor = tintColours[language]
 		languageButton.setTitle(language == .javascript ? "Javascript" : "Lisp", for: .normal)
+		
 		inputTextView.delegate = self
 		outputTextView.attributedText = NSAttributedString(string: "")
 		let notificationCenter = NotificationCenter.default
@@ -76,9 +77,8 @@ class ViewController: UIViewController, UITextViewDelegate {
 		inputTextView.backgroundColor = UIColor(white: 0.5, alpha: 0.25)
 		enterButton.backgroundColor = inputTextView.backgroundColor
 		
-//		let placeholder = NSAttributedString(string: ">", attributes: [NSFontAttributeName: UIFont(name: "SFMono-Bold", size: (inputTextView.font?.pointSize)!)!,NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.3)  ])
-//		inputTextView.attributedPlaceholder = placeholder
 		addMaths(jsContext: jsContext!)
+		evaluateLisp(input: builtInLisp, output: false)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -188,10 +188,13 @@ class ViewController: UIViewController, UITextViewDelegate {
 		textVText.append(NSAttributedString(string: "\n"))
 	}
 	
-	func evaluateLisp(input: String) {
+	func evaluateLisp(input: String, output: Bool = true) {
 		do {
 			let parsed = try parse(input)
 			let evaluated = eval(lists: parsed.value as! List, environment: lispGlobalEnvironment)
+			if !output {
+				return
+			}
 			for output in evaluated {
 				appendMessage(message: "\(output)")
 			}
