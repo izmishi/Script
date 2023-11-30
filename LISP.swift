@@ -275,7 +275,7 @@ class Environment {
 			guard list.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
-			if var l = list[1] as? List {
+			if let l = list[1] as? List {
 				let cdr = Array(l[1..<l.count])
 				return Expression(cdr)
 			} else {
@@ -351,7 +351,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (sin x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -361,7 +361,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (cos x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -371,7 +371,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (tan x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -381,7 +381,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (asin x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -391,7 +391,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (acos x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -401,7 +401,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (atan x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -411,7 +411,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (exp x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -421,7 +421,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (log x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -431,7 +431,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (expt x y)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -441,7 +441,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (sqrt x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -451,7 +451,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (abs x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -461,7 +461,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (round x)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -471,7 +471,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (mod x y)")
 			}
-			var x = try self.getNumbers(from: array)
+			let x = try self.getNumbers(from: array)
 			guard x.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -510,7 +510,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (< x y)")
 			}
-			var args = try self.getNumbers(from: array)
+			let args = try self.getNumbers(from: array)
 			guard args.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -520,7 +520,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (<= x y)")
 			}
-			var args = try self.getNumbers(from: array)
+			let args = try self.getNumbers(from: array)
 			guard args.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -530,7 +530,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (> x y)")
 			}
-			var args = try self.getNumbers(from: array)
+			let args = try self.getNumbers(from: array)
 			guard args.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -540,7 +540,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (>= x y)")
 			}
-			var args = try self.getNumbers(from: array)
+			let args = try self.getNumbers(from: array)
 			guard args.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -550,7 +550,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (= x y)")
 			}
-			var args = try self.getNumbers(from: array)
+			let args = try self.getNumbers(from: array)
 			guard args.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -560,7 +560,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (not x)")
 			}
-			var args = try self.getBools(from: array)
+			let args = try self.getBools(from: array)
 			guard args.count == 1 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 1)
 			}
@@ -599,7 +599,7 @@ class Environment {
 			guard array.count > 0 else {
 				throw LispMessage.typeDescription("Function (equal? (list) (list))")
 			}
-			var args = try self.getLists(from: array)
+			let args = try self.getLists(from: array)
 			guard args.count == 2 else {
 				throw LispError.incorrectArgumentCount(shouldBe: 2)
 			}
@@ -784,7 +784,7 @@ func evaluate(_ exp: Expression, environment env: Environment, quote: Bool = fal
 				guard list.count == 4 else {
 					throw LispError.incorrectArgumentCount(shouldBe: 3)
 				}
-				if let condition = try? evaluate(Expression(list[1]), environment: env).value as! Bool {
+				if let condition = try? evaluate(Expression(list[1]), environment: env).value as? Bool {
 					let toEvaluate = condition ? list[2] : list[3]
 					return try evaluate(Expression(toEvaluate), environment: env)
 				} else {
@@ -865,14 +865,14 @@ func evaluate(_ exp: Expression, environment env: Environment, quote: Bool = fal
 				return toReturn
 			} else {
 				if let proc = try env.find(symbol: firstSymbol)!.symbols[firstSymbol] {
-					var args = list
+					let args = list
 					let arguments = try args[1..<args.count].map { try evaluate(Expression($0), environment: env).value! }
 					return try proc([list[0]] + arguments)
 				} else {
 					throw LispError.undefinedError(message: "\(firstSymbol) is not a symbol")
 				}
 			}
-		} else if let firstNumber = list.first as? Number {
+		} else if list.first is Number {
 			return Expression(list)
 		} else {
 			do {

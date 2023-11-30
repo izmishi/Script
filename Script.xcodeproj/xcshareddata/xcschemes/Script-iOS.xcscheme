@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "80796CFE1D35C01900A728B3"
+               BlueprintIdentifier = "80796D331D35C0FA00A728B3"
                BuildableName = "Script.app"
-               BlueprintName = "Script"
+               BlueprintName = "Script-iOS"
                ReferencedContainer = "container:Script.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -30,33 +30,13 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "80796CFE1D35C01900A728B3"
+            BlueprintIdentifier = "80796D331D35C0FA00A728B3"
             BuildableName = "Script.app"
-            BlueprintName = "Script"
+            BlueprintName = "Script-iOS"
             ReferencedContainer = "container:Script.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "80796D121D35C01B00A728B3"
-               BuildableName = "ScriptTests.xctest"
-               BlueprintName = "ScriptTests"
-               ReferencedContainer = "container:Script.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "80796D1D1D35C01B00A728B3"
-               BuildableName = "ScriptUITests.xctest"
-               BlueprintName = "ScriptUITests"
-               ReferencedContainer = "container:Script.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -73,9 +53,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "80796CFE1D35C01900A728B3"
+            BlueprintIdentifier = "80796D331D35C0FA00A728B3"
             BuildableName = "Script.app"
-            BlueprintName = "Script"
+            BlueprintName = "Script-iOS"
             ReferencedContainer = "container:Script.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -90,9 +70,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "80796CFE1D35C01900A728B3"
+            BlueprintIdentifier = "80796D331D35C0FA00A728B3"
             BuildableName = "Script.app"
-            BlueprintName = "Script"
+            BlueprintName = "Script-iOS"
             ReferencedContainer = "container:Script.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

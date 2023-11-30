@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_0" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -23,11 +21,11 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aeQ-c3-D9c">
-                                <rect key="frame" x="8" y="50" width="304" height="466"/>
+                                <rect key="frame" x="8" y="74" width="359" height="652"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <attributedString key="attributedText">
                                     <fragment>
@@ -41,13 +39,13 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MAV-vV-35E">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="xPP-q1-1mS">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLM-8o-bze">
-                                            <rect key="frame" x="8" y="16" width="304" height="34"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLM-8o-bze">
+                                            <rect key="frame" x="0.0" y="40" width="375" height="34"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                             <state key="normal" title="Javascript"/>
                                             <connections>
@@ -56,20 +54,16 @@
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="yLM-8o-bze" secondAttribute="trailing" constant="8" id="FR6-yd-6yR"/>
-                                        <constraint firstItem="yLM-8o-bze" firstAttribute="top" secondItem="xPP-q1-1mS" secondAttribute="top" constant="16" id="Fwy-gh-CBb"/>
-                                        <constraint firstAttribute="bottom" secondItem="yLM-8o-bze" secondAttribute="bottom" id="L0B-Ed-KOO"/>
-                                        <constraint firstItem="yLM-8o-bze" firstAttribute="leading" secondItem="xPP-q1-1mS" secondAttribute="leading" constant="8" id="lGf-c2-Rnh"/>
-                                        <constraint firstItem="yLM-8o-bze" firstAttribute="centerX" secondItem="xPP-q1-1mS" secondAttribute="centerX" id="ohb-ta-xgu"/>
+                                        <constraint firstItem="yLM-8o-bze" firstAttribute="leading" secondItem="xPP-q1-1mS" secondAttribute="leading" id="Gu5-pt-2iL"/>
+                                        <constraint firstAttribute="bottom" secondItem="yLM-8o-bze" secondAttribute="bottom" id="cSE-MJ-da0"/>
+                                        <constraint firstItem="yLM-8o-bze" firstAttribute="centerX" secondItem="xPP-q1-1mS" secondAttribute="centerX" id="k6o-X3-pHv"/>
+                                        <constraint firstItem="yLM-8o-bze" firstAttribute="top" secondItem="xPP-q1-1mS" secondAttribute="top" constant="40" id="qMc-N2-oUw"/>
                                     </constraints>
                                 </view>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="5dG-i8-nKm"/>
-                                </constraints>
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" text="&gt;" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="chG-Ge-gy2">
-                                <rect key="frame" x="8" y="524" width="268" height="36"/>
+                                <rect key="frame" x="8" y="734" width="323" height="36"/>
                                 <color key="backgroundColor" white="0.20021634615384615" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="o8V-BM-YeF"/>
@@ -78,14 +72,14 @@
                                 <fontDescription key="fontDescription" name="SFMono-Medium" family="SF Mono" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zuy-wd-45q">
-                                <rect key="frame" x="276" y="524" width="36" height="36"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zuy-wd-45q">
+                                <rect key="frame" x="331" y="734" width="36" height="36"/>
                                 <color key="backgroundColor" white="0.20021634620000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="36" id="nsJ-E0-rXd"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="⬆︎"/>
+                                <state key="normal" title="⇧"/>
                                 <connections>
                                     <action selector="enterButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ws1-9s-Y83"/>
                                 </connections>
@@ -122,7 +116,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="82.5" y="42.25352112676056"/>
+            <point key="canvasLocation" x="82.400000000000006" y="42.118226600985224"/>
         </scene>
     </scenes>
 </document>

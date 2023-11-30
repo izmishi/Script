@@ -68,8 +68,8 @@ class ViewController: UIViewController, UITextViewDelegate {
 		inputTextView.delegate = self
 		outputTextView.attributedText = NSAttributedString(string: "")
 		let notificationCenter = NotificationCenter.default
-		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil);
-		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil);
+		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+		notificationCenter.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 		outputTextView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
 		setNeedsStatusBarAppearanceUpdate()
 		inputTextView.font = UIFont(name: normalFontName, size: fontSize + 2)
@@ -354,6 +354,10 @@ class ViewController: UIViewController, UITextViewDelegate {
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return UIStatusBarStyle.lightContent
+	}
+	
+	override var keyCommands: [UIKeyCommand]? {
+		return [UIKeyCommand(input: "\r", modifierFlags: .command, action: #selector(enterButtonPressed(_:)), discoverabilityTitle: "Run Code"), UIKeyCommand(input: "\n", modifierFlags: .command, action: #selector(enterButtonPressed(_:)), discoverabilityTitle: "Run Code")]
 	}
 }
 

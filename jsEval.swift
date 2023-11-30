@@ -77,9 +77,9 @@ func getFunctionAndParameterNames(script: String, context: JSContext) -> (funcNa
 }
 
 func evaluateJS(script: String, context: JSContext) -> (eval: [JSValue], msg: String) {
-	var eval: [JSValue] = []
+	var _: [JSValue] = []
 	var message: String = "undefined"
-	var script = script.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+	let script = script.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 	
 	defer {
 		appendMessage(message: message)
@@ -193,7 +193,7 @@ func jsEval(script: String, context: JSContext) -> (eval: [JSValue], msg: String
 		for j in 0...semicolonIndices.count {
 			let start = script.index(script.startIndex, offsetBy: j == 0 ? 0 : semicolonIndices[j - 1])
 			let end = script.index(script.startIndex, offsetBy: j < semicolonIndices.count ?  semicolonIndices[j] : script.count)
-			var (e, m) = evaluateJS(script: String(script[start..<end]), context: context)
+			let (e, m) = evaluateJS(script: String(script[start..<end]), context: context)
 			eval.append(e[0])
 			message += "\(m)" //+ (j < semicolonIndices.count && m != "" ? "\n" : "")
 		}
